@@ -1,0 +1,19 @@
+{
+  "name": "random-gc",
+  "version": "1.0.0",
+  "description": "GC Randomizer",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jwerre1/Random-GC.git"
+  },
+  "author": "Jordan Werre",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jwerre1/Random-GC/issues"
+  },
+  "homepage": "https://github.com/jwerre1/Random-GC#readme"
+}
