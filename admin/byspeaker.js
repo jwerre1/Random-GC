@@ -27,66 +27,21 @@ const conferenceLink = link => {
 
 const notPicture = link => (link.className.indexOf('omeqik-0') !== -1);
 
-(() => {
-  mongoose.connect(
-    process.env.DB_CONNECT,
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    },
-    async () => {
-      console.log("connected to db");
-      const response = await axios.get(speakersURL);
-      const dom = new JSDOM(response.data);
-      const nodeList = [...dom.window.document.querySelectorAll('a')];
+const findTalk = async input => {
+  const returnValue = await Talk.findOne({ 'url': input }, (err, res) => {
+    if (err || !res) return 0;
+    return res._id;
+  });
+  return returnValue
+}
 
-      const links = await nodeList.filter(speakersLink).filter(notPicture);
-
-      for (const link of links) {
-        const speakerLink = baseURL + link.href + language;
-        const speaker = link.querySelector('h4').textContent;
-        const speakerID = await setSpeaker(speaker);
-
-        const pageResponse = await axios.get(speakerLink);
-        const speakerDom = new JSDOM(pageResponse.data);
-        const speakerNodeList = [...speakerDom.window.document.querySelectorAll('a')];
-        const talks = await speakerNodeList.filter(conferenceLink);
-        for (const talk of talks) {
-          const talkLink = talk.href;
-          const title = talk.querySelector('h4').textContent;
-          const conference = talk.querySelector('h6').textContent;
-          let conferenceID = await findConference(conference);
-          if (!conferenceID) {
-            conferenceID = await setConference(conference);
-            console.log("no conference", conferenceID)
-          }
-          else console.log("conference found!", conferenceID)
-          if (speakerID === 0 || conferenceID === 0) continue;
-
-          const newTalk = new Talk({
-            title: title,
-            url: talkLink,
-            speaker: speakerID,
-            conference: conferenceID
-          });
-          try {
-            const savedTalk = await newTalk.save();
-            const talkres = await Speaker.updateOne(
-              { _id: savedTalk.speaker },
-              { $push: { talks: savedTalk._id } }
-            )
-            const confres = await Conference.updateOne(
-              { _id: savedTalk.conference },
-              { $push: { talks: savedTalk._id } }
-            )
-          } catch (error) {
-            console.log(error);
-          }
-        }
-      }
-    })
-})();
-
+const findSpeaker = async input => {
+  const returnValue = await Conference.findOne({ 'name': input }, (err, res) => {
+    if (err || !res) return 0;
+    return res._id;
+  });
+  return returnValue
+}
 
 const setSpeaker = async input => {
   const speaker = new Speaker({
@@ -131,4 +86,72 @@ const setConference = async input => {
   }
 }
 
+(() => {
+  mongoose.connect(
+    process.env.DB_CONNECT,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    },
+    async () => {
+      console.log("connected to db");
+      const response = await axios.get(speakersURL);
+      const dom = new JSDOM(response.data);
+      const nodeList = [...dom.window.document.querySelectorAll('a')];
 
+      const links = await nodeList.filter(speakersLink).filter(notPicture);
+
+      speakerLoop:
+      for (const link of links) {
+        const speakerLink = baseURL + link.href + language;
+        const speaker = link.querySelector('h4').textContent;
+        let speakerID = await findSpeaker(speaker);
+        if (!speakerID) {
+          speakerID = await setSpeaker(speaker);
+          console.log("new speaker", speakerID)
+        }
+        if (!speakerID) continue speakerLoop;
+
+        const pageResponse = await axios.get(speakerLink);
+        const speakerDom = new JSDOM(pageResponse.data);
+        const speakerNodeList = [...speakerDom.window.document.querySelectorAll('a')];
+        const talks = await speakerNodeList.filter(conferenceLink);
+        talkLoop:
+        for (const talk of talks) {
+          const talkLink = talk.href;
+          const talkID = await findTalk(talkLink);
+          if (talkID) continue talkLoop; //Talk already saved. 
+          console.log("new talk");
+
+          const title = talk.querySelector('h4').textContent;
+          const conference = talk.querySelector('h6').textContent;
+          let conferenceID = await findConference(conference);
+          if (!conferenceID) {
+            conferenceID = await setConference(conference);
+            console.log("new conference", conferenceID)
+          }
+          if (!conferenceID) continue talkLoop;
+
+          const newTalk = new Talk({
+            title: title,
+            url: talkLink,
+            speaker: speakerID,
+            conference: conferenceID
+          });
+          try {
+            const savedTalk = await newTalk.save();
+            const talkres = await Speaker.updateOne(
+              { _id: savedTalk.speaker },
+              { $push: { talks: savedTalk._id } }
+            )
+            const confres = await Conference.updateOne(
+              { _id: savedTalk.conference },
+              { $push: { talks: savedTalk._id } }
+            )
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      }
+    })
+})();
