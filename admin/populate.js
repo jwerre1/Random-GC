@@ -11,6 +11,8 @@ const Talk = require('../model/Talk');
 const Speaker = require('../model/Speaker');
 const Conference = require('../model/Conference');
 
+const speaker = "David A. Bednar";
+
 (() => {
   mongoose.connect(
     process.env.DB_CONNECT,
@@ -20,8 +22,7 @@ const Conference = require('../model/Conference');
     },
     () => {
       console.log("connected to db");
-      Speaker.find({}, (err, speakers) => {
-        console.log(speakers);
+      Speaker.find({ speaker }, (err, speakers) => {
         if (err) console.log(err);
         const opts = [{ path: 'talks' }];
         Speaker.populate(speakers, opts, (error, spkers) => {
@@ -29,10 +30,12 @@ const Conference = require('../model/Conference');
           spkers.forEach(spker => console.log(spker))
         });
       });
+      /*
       Conference.find({}, (err, confs) => {
         const opts = [{ path: 'talks' }];
         const promise = Conference.populate(confs, opts);
         promise.then(console.log);
       });
+      */
     })
 })();

@@ -7,7 +7,7 @@ const conferenceSchema = new Schema({
     required: true,
   },
   month: {
-    type: Number,
+    type: String,
     required: true,
   },
   talks: [{ type: Schema.Types.ObjectId, ref: 'Talk' }]
