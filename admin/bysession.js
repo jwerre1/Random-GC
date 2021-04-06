@@ -12,7 +12,7 @@ const { JSDOM } = jsdom;
 const axios = require('axios');
 
 const parms = {
-  start: 1971,
+  start: 1999,
   end: 2020,
   months: ['04', '10']
 }
@@ -21,7 +21,7 @@ const baseURL = 'https://www.churchofjesuschrist.org';
 const language = '?lang=eng';
 
 const conferenceLink = link => {
-  const linkRegex = /^\/study\/general-conference\//;
+  const linkRegex = /^\/study\/general-conference\/[1-2]/;
   return linkRegex.test(link.href)
 }
 
@@ -108,7 +108,7 @@ const setConference = async input => {
 
           const conference = dom.window.document.querySelector('h1').textContent;
           let conferenceID = await findConference(conference);
-          //if (!conferenceID) conferenceID = await setConference(conference);
+          if (!conferenceID) conferenceID = await setConference(conference);
           if (!conferenceID) {
             console.log(`ERROR: Couldn't process conference ${conference}.`)
             continue sessionLoop; //error finding/creating conference
@@ -116,19 +116,21 @@ const setConference = async input => {
 
           talkLoop:
           for (const link of links) {
-            const talkLink = link.href;
+            const linkParts = link.href.split('?');
+            const talkLink = linkParts[0];
             const talkID = await findTalk(talkLink);
             if (talkID) {
               console.log(`No Update: Talk saved previously ${talkLink}`);
               continue talkLoop; //Talk already saved.
             }
-            const speaker = [...link.getElementsByClassName('subtitle-MuO4X')];
-            if (speaker.length > 1) {
-              console.log(`ERROR: Multiple speakers found for ${talkLink}.`);
+            const speakerList = [...link.getElementsByClassName('subtitle-MuO4X')];
+            if (speakerList.length !== 1) {
+              console.log(`ERROR: Multiple/no speakers found for ${talkLink}.`);
               continue talkLoop;
             }
+            const speaker = speakerList[0].textContent;
             let speakerID = await findSpeaker(speaker);
-            //if (!speakerID) speakerID = await setSpeaker(speaker);
+            if (!speakerID) speakerID = await setSpeaker(speaker);
             if (!speakerID) {
               console.log(`ERROR: Couldn't process speaker ${speaker}.`);
               continue talkLoop; //error finding/creating speaker
@@ -146,6 +148,7 @@ const setConference = async input => {
             });
             try {
               const savedTalk = await newTalk.save();
+              console.log(`Complete: Talk updated --- ${savedTalk.title} (${savedTalk.url})`);
               const talkres = await Speaker.updateOne(
                 { _id: savedTalk.speaker },
                 { $push: { talks: savedTalk._id } }
@@ -160,5 +163,6 @@ const setConference = async input => {
           }
         }
       }
+      console.log("process complete");
     })
 })();

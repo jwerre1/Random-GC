@@ -120,7 +120,10 @@ const setConference = async input => {
         for (const talk of talks) {
           const talkLink = talk.href;
           const talkID = await findTalk(talkLink);
-          if (talkID) continue talkLoop; //Talk already saved.
+          if (talkID) {
+            console.log(`No Update: Talk saved previously ${talkLink}`);
+            continue talkLoop; //Talk already saved.
+          }
 
           const title = talk.querySelector('h4').textContent;
           const conference = talk.querySelector('h6').textContent;
@@ -152,5 +155,6 @@ const setConference = async input => {
           }
         }
       }
+      console.log("process complete");
     })
 })();

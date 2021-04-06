@@ -48,7 +48,7 @@ const setTopic = async input => {
   });
   try {
     const savedTopic = await topic.save();
-    console.log(`toptic ${topic.topicname} saved!`);
+    console.log(`Created - Topic: ${topic.topicname}`);
     return savedTopic._id;
   } catch (error) {
     console.log(error);
