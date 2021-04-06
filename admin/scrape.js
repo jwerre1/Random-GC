@@ -14,7 +14,15 @@ const axios = require('axios');
 const parms = {
   start: 1971,
   end: 2020,
-  months: ['04', '10']
+  months: [
+    {
+      number: '04',
+      month: 'April'
+    }, {
+      number: '10',
+      month: 'October'
+    }
+  ]
 }
 
 const baseURL = 'https://www.churchofjesuschrist.org';
@@ -25,26 +33,14 @@ const conferenceLink = link => {
   return linkRegex.test(link.href)
 }
 
-const notSidebar = link => (link.classList.length === 0);
+const sidebar = link => (link.className.indexOf('item-3cCP7') !== -1);
 
-const parsePage = data => {
-  const dom = new JSDOM(data);
-
-  const title = dom.window.document.getElementById('title1');
-  const subtitle = [...dom.window.document.getElementsByClassName('subtitle')];
-  let speakerElement;
-  try {
-    speakerElement = dom.window.document.getElementById('p1');
-  } catch {
-    speakerElement = dom.window.document.getElementById('title1');
-  }
-  if (!speakerElement) return { speaker: "no speaker" };
-  let returnTitle = title.textContent;
-  if (subtitle.length) subtitle.forEach(sub => returnTitle += sub.textContent);
-  return {
-    speaker: speakerElement.textContent.trim(),
-    title: returnTitle,
-  }
+const findTalk = async input => {
+  const returnValue = await Talk.findOne({ 'url': input }, (err, res) => {
+    if (err || !res) return 0;
+    return res._id;
+  });
+  return returnValue
 }
 
 (() => {
@@ -56,19 +52,32 @@ const parsePage = data => {
     },
     async () => {
       console.log("connected to db");
-      let talkArr = [];
-      let speakerArr = [];
-      let conferenceArr = [];
       for (let i = parms.start; i <= parms.end; i++) {
         for (const m of parms.months) {
-          const url = baseURL + '/study/general-conference/' + i.toString() + "/" + m + language;
+          const url = baseURL + '/study/general-conference/' + i.toString() + "/" + m.number + language;
 
           const response = await axios.get(url);
           const dom = new JSDOM(response.data);
           const nodeList = [...dom.window.document.querySelectorAll('a')];
 
-          const links = await nodeList.filter(conferenceLink).filter(notSidebar);
+          const links = await nodeList.filter(conferenceLink).filter(sidebar);
+
+          talkLoop:
           for (const link of links) {
+            const talkLink = link.href;
+            const talkID = await findTalk(talkLink);
+            if (talkID) {
+              console.log(`No Update: Talk saved previously ${talkLink}`);
+              continue talkLoop; //Talk already saved.
+            }
+            const speaker = 
+
+
+
+
+
+
+
             const talkLink = baseURL + link.href;
             const pageResponse = await axios.get(talkLink);
             const parsedPage = await parsePage(pageResponse.data);

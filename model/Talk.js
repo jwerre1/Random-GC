@@ -12,7 +12,7 @@ const talkSchema = new Schema({
   },
   speaker: { type: Schema.Types.ObjectId, ref: 'Speaker' },
   conference: { type: Schema.Types.ObjectId, ref: 'Conference' },
-  //topics: [{ type: Schema.Types.ObjectId, ref: 'Topic' }]
+  topics: [{ type: Schema.Types.ObjectId, ref: 'Topic' }]
 });
 
 module.exports = mongoose.model('Talk', talkSchema);

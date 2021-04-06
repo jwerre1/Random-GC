@@ -106,10 +106,7 @@ const setConference = async input => {
         const speakerLink = baseURL + link.href + language;
         const speaker = link.querySelector('h4').textContent;
         let speakerID = await findSpeaker(speaker);
-        if (!speakerID) {
-          speakerID = await setSpeaker(speaker);
-          console.log("new speaker", speaker)
-        }
+        if (!speakerID) speakerID = await setSpeaker(speaker);
         if (!speakerID) {
           console.log(`ERROR: Couldn't process speaker ${speaker}.`)
           continue speakerLoop; //error finding/creating speaker
@@ -128,10 +125,7 @@ const setConference = async input => {
           const title = talk.querySelector('h4').textContent;
           const conference = talk.querySelector('h6').textContent;
           let conferenceID = await findConference(conference);
-          if (!conferenceID) {
-            conferenceID = await setConference(conference);
-            console.log("new conference", conference)
-          }
+          if (!conferenceID) conferenceID = await setConference(conference);
           if (!conferenceID) {
             console.log(`ERROR: Couldn't process conference ${conference}.`)
             continue talkLoop; //error finding/creating conference

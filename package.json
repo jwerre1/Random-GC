@@ -8,7 +8,8 @@
     "start": "nodemon app.js",
     "populate": "node ./admin/populate.js",
     "scrape": "node ./admin/scrape.js",
-    "scrape:speakers": "node ./admin/byspeaker.js"
+    "scrape:speakers": "node ./admin/byspeaker.js",
+    "scrape:topics": "node ./admin/topics.js"
   },
   "repository": {
     "type": "git",
