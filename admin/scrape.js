@@ -70,7 +70,6 @@ const findTalk = async input => {
               console.log(`No Update: Talk saved previously ${talkLink}`);
               continue talkLoop; //Talk already saved.
             }
-            const speaker = 
 
 
 
