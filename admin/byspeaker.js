@@ -36,7 +36,7 @@ const findTalk = async input => {
 }
 
 const findSpeaker = async input => {
-  const returnValue = await Conference.findOne({ 'name': input }, (err, res) => {
+  const returnValue = await Speaker.findOne({ 'name': input }, (err, res) => {
     if (err || !res) return 0;
     return res._id;
   });
@@ -108,9 +108,12 @@ const setConference = async input => {
         let speakerID = await findSpeaker(speaker);
         if (!speakerID) {
           speakerID = await setSpeaker(speaker);
-          console.log("new speaker", speakerID)
+          console.log("new speaker", speaker)
         }
-        if (!speakerID) continue speakerLoop;
+        if (!speakerID) {
+          console.log(`ERROR: Couldn't process speaker ${speaker}.`)
+          continue speakerLoop; //error finding/creating speaker
+        }
 
         const pageResponse = await axios.get(speakerLink);
         const speakerDom = new JSDOM(pageResponse.data);
@@ -120,17 +123,19 @@ const setConference = async input => {
         for (const talk of talks) {
           const talkLink = talk.href;
           const talkID = await findTalk(talkLink);
-          if (talkID) continue talkLoop; //Talk already saved. 
-          console.log("new talk");
+          if (talkID) continue talkLoop; //Talk already saved.
 
           const title = talk.querySelector('h4').textContent;
           const conference = talk.querySelector('h6').textContent;
           let conferenceID = await findConference(conference);
           if (!conferenceID) {
             conferenceID = await setConference(conference);
-            console.log("new conference", conferenceID)
+            console.log("new conference", conference)
           }
-          if (!conferenceID) continue talkLoop;
+          if (!conferenceID) {
+            console.log(`ERROR: Couldn't process conference ${conference}.`)
+            continue talkLoop; //error finding/creating conference
+          }
 
           const newTalk = new Talk({
             title: title,
