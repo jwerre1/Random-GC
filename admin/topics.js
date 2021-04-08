@@ -4,9 +4,9 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const Talk = require('../model/Talk');
-const Speaker = require('../model/Speaker');
-const Conference = require('../model/Conference');
 const Topic = require('../model/Topic');
+
+const dbTools = require('./tools/db');
 
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
@@ -24,36 +24,6 @@ const topicsLink = link => {
 const conferenceLink = link => {
   const linkRegex = /^\/study\/general-conference\/[1-2]/;
   return linkRegex.test(link.href)
-}
-
-const findTalk = async input => {
-  const returnValue = await Talk.findOne({ 'url': input }, (err, res) => {
-    if (err || !res) return 0;
-    return res._id;
-  });
-  return returnValue
-}
-
-const findTopic = async input => {
-  const returnValue = await Topic.findOne({ 'topicname': input }, (err, res) => {
-    if (err || !res) return 0;
-    return res._id;
-  });
-  return returnValue
-}
-
-const setTopic = async input => {
-  const topic = new Topic({
-    topicname: input
-  });
-  try {
-    const savedTopic = await topic.save();
-    console.log(`Created - Topic: ${topic.topicname}`);
-    return savedTopic._id;
-  } catch (error) {
-    console.log(error);
-    return 0;
-  }
 }
 
 (() => {
@@ -75,8 +45,8 @@ const setTopic = async input => {
       for (const link of links) {
         const topicLink = baseURL + link.href + language;
         const topicname = link.querySelector('h4').textContent;
-        let topicID = await findTopic(topicname);
-        if (!topicID) topicID = await setTopic(topicname);
+        let topicID = await dbTools.findTopic(topicname);
+        if (!topicID) topicID = await dbTools.setTopic(topicname);
         if (!topicID) {
           console.log(`ERROR: Couldn't process topic ${topicname}.`)
           continue topicLoop; //error finding/creating topic
@@ -89,14 +59,12 @@ const setTopic = async input => {
         talkLoop:
         for (const talk of talks) {
           const talkLink = talk.href;
-          const talkID = await findTalk(talkLink);
+          const talkID = await dbTools.findTalk(talkLink);
           if (!talkID) {
             console.log(`ERROR: Couldn't locate talk ${talkLink}`);
             continue talkLoop; //Talk couldn't be found in database.
           }
 
-          console.log(`Updated: ${topicname} --- ${talkLink}`)
-          /*
           try {
             const topicres = await Topic.updateOne(
               { _id: topicID },
@@ -106,11 +74,10 @@ const setTopic = async input => {
               { _id: talkID },
               { $push: { topics: topicID } }
             )
-            console.log(`Updated: ${topicres.topicname} --- ${talkres.title}`)
+            console.log(`Updated: ${topicname} --- ${talkLink}`)
           } catch (error) {
             console.log(error);
           }
-          */
         }
       }
       console.log("process complete");
