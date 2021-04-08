@@ -9,8 +9,7 @@ const conferenceSchema = new Schema({
   month: {
     type: String,
     required: true,
-  },
-  talks: [{ type: Schema.Types.ObjectId, ref: 'Talk' }]
+  }
 });
 
 module.exports = mongoose.model('Conference', conferenceSchema);

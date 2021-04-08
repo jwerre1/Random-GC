@@ -3,9 +3,9 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const Talk = require('../model/Talk');
-const Speaker = require('../model/Speaker');
-const Conference = require('../model/Conference');
+const Talk = require('../models/Talk');
+const Speaker = require('../models/Speaker');
+const Conference = require('../models/Conference');
 
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
