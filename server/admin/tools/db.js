@@ -1,7 +1,7 @@
-const Talk = require('../../model/Talk');
-const Speaker = require('../../model/Speaker');
-const Conference = require('../../model/Conference');
-const Topic = require('../../model/Topic')
+const Talk = require('../../models/Talk');
+const Speaker = require('../../models/Speaker');
+const Conference = require('../../models/Conference');
+const Topic = require('../../models/Topic')
 
 exports.findTalk = async input => {
   const returnValue = await Talk.findOne({ 'url': input }, (err, res) => {

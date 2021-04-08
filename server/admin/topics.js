@@ -3,8 +3,8 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const Talk = require('../model/Talk');
-const Topic = require('../model/Topic');
+const Talk = require('../models/Talk');
+const Topic = require('../models/Topic');
 
 const dbTools = require('./tools/db');
 
