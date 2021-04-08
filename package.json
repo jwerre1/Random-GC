@@ -7,8 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js",
     "populate": "node ./admin/populate.js",
-    "scrape": "node ./admin/scrape.js",
-    "scrape:speakers": "node ./admin/byspeaker.js"
+    "scrape:session": "node ./admin/bysession.js",
+    "scrape:speakers": "node ./admin/byspeaker.js",
+    "scrape:topics": "node ./admin/topics.js"
   },
   "repository": {
     "type": "git",
