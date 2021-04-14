@@ -1,7 +1,5 @@
 <template>
-  <div id="app">
-    <Random />
-  </div>
+  <Random />
 </template>
 
 <script>

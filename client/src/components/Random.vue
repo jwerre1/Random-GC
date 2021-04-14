@@ -1,5 +1,22 @@
 <template>
-  <div class="random">
+  <div class="random" :touchstart="logTouchstart">
+    <swiper :slides-per-view="1" :space-between="50" :virtual="true">
+      <swiper-slide
+        v-for="(talk, index) in randomizedTalks"
+        :key="index"
+        :virtualIndex="index"
+        >{{ talk.title }}
+      </swiper-slide>
+    </swiper>
+
+    <!-- <div class="random__slide-container">
+      <div class="random__slide" v-for="talk in displayTalks" :key="talk._id">
+        <span :class="{ red: currentTalk._id === talk._id }">
+          {{ talk.title }}
+        </span>
+      </div>
+    </div> -->
+
     <button class="random__btn" @click="lastTalk">Previous</button>
     <button class="random__btn" @click="nextTalk">Next</button>
     <button class="random__btn" @click="shuffle">Shuffle Again</button>
@@ -30,9 +47,20 @@
 
 <script>
 import axios from "axios";
+import SwiperCore, { Virtual } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/vue";
+
+import "swiper/swiper.scss";
+
+//install swiper.js virtual module
+SwiperCore.use([Virtual]);
 
 export default {
   name: "random",
+  components: {
+    Swiper,
+    SwiperSlide,
+  },
   data: function () {
     return {
       talks: [],
@@ -44,7 +72,7 @@ export default {
     };
   },
   computed: {
-    randomizedTalks: function () {
+    randomizedTalks() {
       let array = this.talks,
         currentIndex = this.talks.length,
         tempValue,
@@ -60,38 +88,57 @@ export default {
       }
       return array;
     },
-    currentTalk: function () {
+    displayTalks() {
+      const min = Math.max(this.talkIndex - 2, 0);
+      const max = Math.min(this.talkIndex + 3, this.talks.length);
+      return this.randomizedTalks.slice(min, max);
+    },
+    currentTalk() {
       return this.randomizedTalks[this.talkIndex];
     },
-    fullLink: function () {
+    fullLink() {
       return this.baseURL + this.currentTalk.url + this.language;
     },
   },
   methods: {
-    getTalks: function () {
-      axios.get("http://localhost:3000/talks").then((response) => {
-        const data = response.data;
-        this.baseURL = data.baseURL;
-        this.language = data.language;
-        this.talks = data.talks;
-      });
+    getTalks() {
+      axios
+        .get("http://localhost:3000/talks")
+        .then((response) => {
+          const data = response.data;
+          this.baseURL = data.baseURL;
+          this.language = data.language;
+          this.talks = data.talks;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
-    nextTalk: function () {
+    nextTalk() {
       if (this.talkIndex === this.talks.length - 1) return;
       this.talkIndex++;
     },
-    lastTalk: function () {
+    lastTalk() {
       if (this.talkIndex === 0) return;
       this.talkIndex--;
     },
-    shuffle: function () {
+    shuffle() {
       this.sortKey = Math.random();
       this.talkIndex = 0;
     },
+    logTouchstart() {
+      console.log("touchstart");
+    },
   },
-  mounted: function () {
+  created() {
     this.getTalks();
     this.sortKey = Math.random();
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.red {
+  color: orangered;
+}
+</style>
