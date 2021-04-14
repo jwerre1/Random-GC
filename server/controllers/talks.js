@@ -6,7 +6,12 @@ const Topic = require('../models/Topic');
 
 exports.getAllTalks = async (req, res, next) => {
   try {
-    const talks = await Talk.find().populate('speaker').populate('conference').populate('topics');
+    //use aggregate().sample() to get 100 random talks
+    const talks = await Talk.aggregate([
+      { $sample: { size: 100 } },
+      { $lookup: { from: 'speakers', localField: 'speaker', foreignField: '_id', as: 'speaker' } }
+    ]);//.sample(100);
+    //await talks.populate('speaker').populate('conference').populate('topics').execPopulate();
     res.json({
       baseURL: 'https://www.churchofjesuschrist.org',
       language: '?lang=eng',
