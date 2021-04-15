@@ -1,0 +1,19 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit; /*& force elements to inherit box-sizing property sent in body &*/
+}
+
+html {
+  /* 62.5% of default font size (16px) = 10px = 1rem
+      Used to calculate rem values */
+  font-size: 62.5%; 
+}
+
+body {
+  /* changes box model so borders and paddings aren't added to
+  total width or total height of the box*/
+  box-sizing: border-box; 
+}

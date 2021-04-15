@@ -1,6 +1,7 @@
 <template>
   <div class="random" :touchstart="logTouchstart">
-    <swiper effect="flip" navigation virtual>
+    <swiper navigation virtual>
+      <!-- effect="flip" -->
       <swiper-slide
         v-for="(talk, index) in randomizedTalks"
         :key="index"
@@ -47,15 +48,15 @@
 
 <script>
 import axios from "axios";
-import SwiperCore, { Navigation, Virtual, EffectFlip } from "swiper";
+import SwiperCore, { Navigation, Virtual } from "swiper"; //EffectFlip
 import { Swiper, SwiperSlide } from "swiper/vue";
 
 import "swiper/swiper.scss";
-import "swiper/components/effect-flip/effect-flip.scss";
+//import "swiper/components/effect-flip/effect-flip.scss";
 import "swiper/components/navigation/navigation.scss";
 
 //install swiper.js virtual module
-SwiperCore.use([Navigation, Virtual, EffectFlip]);
+SwiperCore.use([Navigation, Virtual]); //EffectFlip
 
 export default {
   name: "random",
@@ -146,13 +147,19 @@ export default {
 }
 
 .swiper {
-  &-slide {
-    width: 90%;
-  }
-
   &-container {
-    margin-bottom: 100px;
-    font-size: 12px;
+    width: 30rem;
+    height: 30rem;
+    padding: 5rem;
+  }
+  &-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-position: center;
+    background-size: cover;
+    width: 30rem;
+    height: 30rem;
   }
 }
 </style>
