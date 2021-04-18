@@ -1,14 +1,25 @@
 <template>
-  <div class="random" :touchstart="logTouchstart">
-    <swiper navigation virtual>
-      <!-- effect="flip" -->
-      <swiper-slide
-        v-for="(talk, index) in randomizedTalks"
-        :key="index"
-        :virtualIndex="index"
-        >{{ talk.title }}
+  <div class="slider__container">
+    <swiper effect="flip" navigation :slides-per-view="3">
+      <!-- virtual -->
+      <swiper-slide v-for="(talk, index) in talks" :key="index"
+        ><a :href="fullUrl(talk.url)" target="_blank">{{ talk.title }}</a>
+        <!-- :virtualIndex="index" -->
       </swiper-slide>
     </swiper>
+
+    <!-- <div class="swiper-container">
+      <div class="swiper-wrapper">
+        <div
+          class="swiper-slide"
+          v-for="(talk, index) in virtualData.talks"
+          :key="index"
+          :style="slideStyles"
+        >
+          {{ talk.title }}
+        </div>
+      </div>
+    </div> -->
 
     <!-- <div class="random__slide-container">
       <div class="random__slide" v-for="talk in displayTalks" :key="talk._id">
@@ -18,7 +29,7 @@
       </div>
     </div> -->
 
-    <button class="random__btn" @click="lastTalk">Previous</button>
+    <!-- <button class="random__btn" @click="lastTalk">Previous</button>
     <button class="random__btn" @click="nextTalk">Next</button>
     <button class="random__btn" @click="shuffle">Shuffle Again</button>
     <template v-if="currentTalk">
@@ -42,66 +53,42 @@
           </li>
         </ul>
       </div>
-    </template>
+    </template> -->
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import SwiperCore, { Navigation, Virtual } from "swiper"; //EffectFlip
+//import Swiper from "swiper/bundle";
+import SwiperCore, { Navigation, EffectFlip } from "swiper"; //Virtual
 import { Swiper, SwiperSlide } from "swiper/vue";
 
 import "swiper/swiper.scss";
-//import "swiper/components/effect-flip/effect-flip.scss";
+import "swiper/components/effect-flip/effect-flip.scss";
 import "swiper/components/navigation/navigation.scss";
 
 //install swiper.js virtual module
-SwiperCore.use([Navigation, Virtual]); //EffectFlip
+SwiperCore.use([Navigation, EffectFlip]); //Virtual
 
 export default {
-  name: "random",
   components: {
     Swiper,
     SwiperSlide,
   },
-  data: function () {
+  data() {
     return {
       talks: [],
-      talkIndex: 0,
-      initialClick: false,
       baseURL: "",
       language: "",
-      sortKey: 0,
+      // virtualData: {
+      //   talks: [],
+      // },
     };
   },
   computed: {
-    randomizedTalks() {
-      let array = this.talks,
-        currentIndex = this.talks.length,
-        tempValue,
-        randomIndex;
-
-      while (currentIndex !== 0) {
-        randomIndex = Math.floor(this.sortKey * currentIndex);
-        currentIndex--;
-
-        tempValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = tempValue;
-      }
-      return array;
-    },
-    displayTalks() {
-      const min = Math.max(this.talkIndex - 2, 0);
-      const max = Math.min(this.talkIndex + 3, this.talks.length);
-      return this.randomizedTalks.slice(min, max);
-    },
-    currentTalk() {
-      return this.randomizedTalks[this.talkIndex];
-    },
-    fullLink() {
-      return this.baseURL + this.currentTalk.url + this.language;
-    },
+    // slideStyles() {
+    //   return `left: ${this.virtualData.offset / 10}rem`;
+    // },
   },
   methods: {
     getTalks() {
@@ -117,33 +104,35 @@ export default {
           console.log(error);
         });
     },
-    nextTalk() {
-      if (this.talkIndex === this.talks.length - 1) return;
-      this.talkIndex++;
-    },
-    lastTalk() {
-      if (this.talkIndex === 0) return;
-      this.talkIndex--;
-    },
-    shuffle() {
-      this.sortKey = Math.random();
-      this.talkIndex = 0;
-    },
-    logTouchstart() {
-      console.log("touchstart");
+    fullUrl(input) {
+      return this.baseURL + input + this.language;
     },
   },
   created() {
     this.getTalks();
-    this.sortKey = Math.random();
   },
+  // mounted() {
+  //   const self = this;
+  //   new Swiper(".swiper-container", {
+  //     virtual: {
+  //       talks: self.talks,
+  //       renderExternal(data) {
+  //         self.virtualData = data;
+  //       },
+  //     },
+  //   });
+  // },
 };
 </script>
 
 <style lang="scss" scoped>
-.random {
-  width: 80vw;
+.slider {
+  max-width: 80vw;
   background: white;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .swiper {
@@ -156,10 +145,12 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-position: center;
-    background-size: cover;
     width: 30rem;
     height: 30rem;
+
+    &-active {
+      background: lightgray;
+    }
   }
 }
 </style>

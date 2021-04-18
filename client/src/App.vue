@@ -1,5 +1,9 @@
 <template>
-  <Random />
+  <div class="container">
+    <div class="slider">
+      <Random />
+    </div>
+  </div>
 </template>
 
 <script>
@@ -21,5 +25,16 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.container {
+  max-width: 120rem;
+  margin: 8rem auto;
+}
+
+.slider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
