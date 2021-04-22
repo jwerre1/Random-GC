@@ -1,93 +1,44 @@
 <template>
-  <div class="slider__container">
-    <div class="slider__dummy"></div>
-    <swiper effect="flip" navigation :slides-per-view="3">
-      <!-- virtual -->
-      <swiper-slide v-for="(talk, index) in talks" :key="index">
-        <div class="slider__content">
-          <a
-            :href="fullUrl(talk.url)"
-            target="_blank"
-            class="slider__content--link"
-          >
-            <div class="slider__content--title">
-              <!-- <a :href="fullUrl(talk.url)" target="_blank">{{ talk.title }}</a> -->
-              {{ talk.title }}
-            </div>
-            <div class="slider__content--speaker">
-              {{ getSpeaker(talk) }}
-            </div>
-            <div class="slider__content--conference">
-              {{ getConference(talk) }}
-            </div>
-            <div class="slider__content--topics">
-              <span
-                v-for="(topic, index) in talk.topics"
-                :key="talk.url + '_' + index"
-                class="slider__content--topic-item"
-                ><span v-if="index > 0"> &bull; </span
-                >{{ topic.topicname }}</span
-              >
-            </div>
-          </a>
-        </div>
-        <!-- :virtualIndex="index" -->
-      </swiper-slide>
-    </swiper>
-
-    <!-- <div class="swiper-container">
-      <div class="swiper-wrapper">
-        <div
-          class="swiper-slide"
-          v-for="(talk, index) in virtualData.talks"
-          :key="index"
-          :style="slideStyles"
-        >
-          {{ talk.title }}
-        </div>
-      </div>
+  <div class="slider">
+    <div class="slider__container">
+      <div class="slider__dummy"></div>
+      <swiper effect="flip" navigation :slides-per-view="3">
+        <swiper-slide v-for="(talk, index) in talks" :key="index">
+          <div class="slider__content">
+            <a
+              :href="fullUrl(talk.url)"
+              target="_blank"
+              class="slider__content--link"
+            >
+              <div class="slider__content--title">
+                {{ talk.title }}
+              </div>
+              <div class="slider__content--speaker">
+                {{ getSpeaker(talk) }}
+              </div>
+              <div class="slider__content--conference">
+                {{ getConference(talk) }}
+              </div>
+              <div class="slider__content--topics">
+                <span
+                  v-for="(topic, index) in talk.topics"
+                  :key="talk.url + '_' + index"
+                  class="slider__content--topic-item"
+                  ><span v-if="index > 0"> &bull; </span
+                  >{{ topic.topicname }}</span
+                >
+              </div>
+            </a>
+          </div>
+        </swiper-slide>
+      </swiper>
     </div>
-
-    <div class="random__slide-container">
-      <div class="random__slide" v-for="talk in displayTalks" :key="talk._id">
-        <span :class="{ red: currentTalk._id === talk._id }">
-          {{ talk.title }}
-        </span>
-      </div>
-    </div>
-
-     <button class="random__btn" @click="lastTalk">Previous</button>
-    <button class="random__btn" @click="nextTalk">Next</button>
-    <button class="random__btn" @click="shuffle">Shuffle Again</button>
-    <template v-if="currentTalk">
-      <div class="random__title">
-        <a :href="fullLink" target="_blank">{{ currentTalk.title }}</a>
-      </div>
-      <div class="random__speaker">
-        {{ currentTalk.speaker.name }}
-      </div>
-      <div class="random__conference">
-        {{ currentTalk.conference.month }} {{ currentTalk.conference.year }}
-      </div>
-      <div v-if="currentTalk.topics.length > 0" class="random__topics">
-        <ul class="random__topics--list">
-          <li
-            class="random__topics--item"
-            v-for="(item, index) in currentTalk.topics"
-            :key="item + index"
-          >
-            {{ item.topicname }}
-          </li>
-        </ul>
-      </div>
-    </template> -->
   </div>
 </template>
 
 <script>
 import axios from "axios";
-//import Swiper from "swiper/bundle";
-import SwiperCore, { Navigation, EffectFlip } from "swiper"; //Virtual
+import SwiperCore, { Navigation, EffectFlip } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
 
 import "swiper/swiper.scss";
@@ -95,7 +46,7 @@ import "swiper/components/effect-flip/effect-flip.scss";
 import "swiper/components/navigation/navigation.scss";
 
 //install swiper.js virtual module
-SwiperCore.use([Navigation, EffectFlip]); //Virtual
+SwiperCore.use([Navigation, EffectFlip]);
 
 export default {
   components: {
@@ -144,13 +95,20 @@ export default {
 
 <style lang="scss" scoped>
 .slider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-top: 10rem;
+
   &__container {
     display: inline-block;
     position: relative;
     width: 100%;
-    background: var(--color-background-white);
+    background: var(--color-white);
 
     font-family: "Libre Baskerville", serif;
+    font-weight: 400;
   }
 
   &__dummy {
@@ -213,9 +171,6 @@ export default {
     padding: 5rem;
   }
   &-slide {
-    //display: flex;
-    //justify-content: center;
-    //align-items: center;
     width: 100%;
     max-width: var(--slider-sqr);
     height: 100%;
@@ -223,7 +178,7 @@ export default {
     box-shadow: 0.5rem 2rem 5rem rgba(0, 0, 0, 0.175);
 
     &-active {
-      background: lightgray;
+      background: var(--color-grey-4);
     }
   }
 }
