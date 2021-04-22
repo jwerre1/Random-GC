@@ -1,53 +1,44 @@
 <template>
-  <div class="random" :touchstart="logTouchstart">
-    <swiper effect="flip" navigation virtual>
-      <swiper-slide
-        v-for="(talk, index) in randomizedTalks"
-        :key="index"
-        :virtualIndex="index"
-        >{{ talk.title }}
-      </swiper-slide>
-    </swiper>
-
-    <!-- <div class="random__slide-container">
-      <div class="random__slide" v-for="talk in displayTalks" :key="talk._id">
-        <span :class="{ red: currentTalk._id === talk._id }">
-          {{ talk.title }}
-        </span>
-      </div>
-    </div> -->
-
-    <button class="random__btn" @click="lastTalk">Previous</button>
-    <button class="random__btn" @click="nextTalk">Next</button>
-    <button class="random__btn" @click="shuffle">Shuffle Again</button>
-    <template v-if="currentTalk">
-      <div class="random__title">
-        <a :href="fullLink" target="_blank">{{ currentTalk.title }}</a>
-      </div>
-      <div class="random__speaker">
-        {{ currentTalk.speaker.name }}
-      </div>
-      <div class="random__conference">
-        {{ currentTalk.conference.month }} {{ currentTalk.conference.year }}
-      </div>
-      <div v-if="currentTalk.topics.length > 0" class="random__topics">
-        <ul class="random__topics--list">
-          <li
-            class="random__topics--item"
-            v-for="(item, index) in currentTalk.topics"
-            :key="item + index"
-          >
-            {{ item.topicname }}
-          </li>
-        </ul>
-      </div>
-    </template>
+  <div class="slider">
+    <div class="slider__container">
+      <div class="slider__dummy"></div>
+      <swiper effect="flip" navigation :slides-per-view="3">
+        <swiper-slide v-for="(talk, index) in talks" :key="index">
+          <div class="slider__content">
+            <a
+              :href="fullUrl(talk.url)"
+              target="_blank"
+              class="slider__content--link"
+            >
+              <div class="slider__content--title">
+                {{ talk.title }}
+              </div>
+              <div class="slider__content--speaker">
+                {{ getSpeaker(talk) }}
+              </div>
+              <div class="slider__content--conference">
+                {{ getConference(talk) }}
+              </div>
+              <div class="slider__content--topics">
+                <span
+                  v-for="(topic, index) in talk.topics"
+                  :key="talk.url + '_' + index"
+                  class="slider__content--topic-item"
+                  ><span v-if="index > 0"> &bull; </span
+                  >{{ topic.topicname }}</span
+                >
+              </div>
+            </a>
+          </div>
+        </swiper-slide>
+      </swiper>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import SwiperCore, { Navigation, Virtual, EffectFlip } from "swiper";
+import SwiperCore, { Navigation, EffectFlip } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
 
 import "swiper/swiper.scss";
@@ -55,52 +46,19 @@ import "swiper/components/effect-flip/effect-flip.scss";
 import "swiper/components/navigation/navigation.scss";
 
 //install swiper.js virtual module
-SwiperCore.use([Navigation, Virtual, EffectFlip]);
+SwiperCore.use([Navigation, EffectFlip]);
 
 export default {
-  name: "random",
   components: {
     Swiper,
     SwiperSlide,
   },
-  data: function () {
+  data() {
     return {
       talks: [],
-      talkIndex: 0,
-      initialClick: false,
       baseURL: "",
       language: "",
-      sortKey: 0,
     };
-  },
-  computed: {
-    randomizedTalks() {
-      let array = this.talks,
-        currentIndex = this.talks.length,
-        tempValue,
-        randomIndex;
-
-      while (currentIndex !== 0) {
-        randomIndex = Math.floor(this.sortKey * currentIndex);
-        currentIndex--;
-
-        tempValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = tempValue;
-      }
-      return array;
-    },
-    displayTalks() {
-      const min = Math.max(this.talkIndex - 2, 0);
-      const max = Math.min(this.talkIndex + 3, this.talks.length);
-      return this.randomizedTalks.slice(min, max);
-    },
-    currentTalk() {
-      return this.randomizedTalks[this.talkIndex];
-    },
-    fullLink() {
-      return this.baseURL + this.currentTalk.url + this.language;
-    },
   },
   methods: {
     getTalks() {
@@ -116,43 +74,112 @@ export default {
           console.log(error);
         });
     },
-    nextTalk() {
-      if (this.talkIndex === this.talks.length - 1) return;
-      this.talkIndex++;
+    fullUrl(input) {
+      return this.baseURL + input + this.language;
     },
-    lastTalk() {
-      if (this.talkIndex === 0) return;
-      this.talkIndex--;
+    getSpeaker(input) {
+      return input.speaker[0]?.name || "";
     },
-    shuffle() {
-      this.sortKey = Math.random();
-      this.talkIndex = 0;
-    },
-    logTouchstart() {
-      console.log("touchstart");
+    getConference(input) {
+      if (!input.conference[0]) return "";
+      const conf =
+        input.conference[0].month + " " + input.conference[0].year.toString();
+      return conf.trim();
     },
   },
   created() {
     this.getTalks();
-    this.sortKey = Math.random();
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.random {
-  width: 80vw;
-  background: white;
+.slider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-top: 10rem;
+
+  &__container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    background: var(--color-white);
+
+    font-family: "Libre Baskerville", serif;
+    font-weight: 400;
+  }
+
+  &__dummy {
+    margin-top: 100%;
+  }
+
+  &__content {
+    width: 100%;
+    height: 100%;
+    padding: 2.5rem;
+
+    &--link {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+      color: var(--color-font-black);
+    }
+
+    &--title {
+      font-size: 2.4rem;
+    }
+
+    &--speaker {
+      font-size: 1.8rem;
+      padding-top: 1rem;
+    }
+
+    &--conference {
+      font-size: 1.6rem;
+      padding-top: 1rem;
+    }
+
+    &--topics {
+      padding-top: 2.2rem;
+    }
+
+    &--topic-item {
+      list-style: none;
+      text-transform: capitalize;
+      font-size: 1.4rem;
+    }
+  }
 }
 
 .swiper {
-  &-slide {
-    width: 90%;
-  }
-
   &-container {
-    margin-bottom: 100px;
-    font-size: 12px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: var(--slider-sqr);
+    height: 100%;
+    max-height: var(--slider-sqr);
+    padding: 5rem;
+  }
+  &-slide {
+    width: 100%;
+    max-width: var(--slider-sqr);
+    height: 100%;
+    max-height: var(--slider-sqr);
+    box-shadow: 0.5rem 2rem 5rem rgba(0, 0, 0, 0.175);
+
+    &-active {
+      background: var(--color-grey-4);
+    }
   }
 }
 </style>
