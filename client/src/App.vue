@@ -1,19 +1,24 @@
 <template>
   <div class="container">
     <Header />
-    <Random />
+    <div class="content">
+      <Random />
+      <Search />
+    </div>
   </div>
 </template>
 
 <script>
-import Header from "./components/Header.vue";
-import Random from "./components/Random.vue";
+import Header from "@/components/Header.vue";
+import Random from "@/components/Random.vue";
+import Search from "@/components/Search.vue";
 
 export default {
   name: "App",
   components: {
     Header,
     Random,
+    Search,
   },
 };
 </script>
@@ -56,8 +61,11 @@ body {
   width: 100%;
   max-width: 120rem;
   margin: 8rem auto;
-
   background-color: var(--color-white);
+}
+
+.content {
+  display: flex;
 }
 
 #app {

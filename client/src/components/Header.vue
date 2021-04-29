@@ -1,12 +1,12 @@
 <template>
-  <div class="header">
+  <header class="header">
     <div class="header__title">
       <h1 class="header__title--main">Random GC</h1>
       <div class="header__title--subtitle">
         A Random General Conference Talk Finder
       </div>
     </div>
-  </div>
+  </header>
 </template>
 
 <style lang="scss" scoped>

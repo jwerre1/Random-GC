@@ -2,7 +2,12 @@
   <div class="slider">
     <div class="slider__container">
       <div class="slider__dummy"></div>
-      <swiper effect="flip" navigation :slides-per-view="3">
+      <swiper
+        v-if="talks.length > 0"
+        effect="flip"
+        navigation
+        :slides-per-view="3"
+      >
         <swiper-slide v-for="(talk, index) in talks" :key="index">
           <div class="slider__content">
             <a
@@ -37,7 +42,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import TalkService from "@/services/TalkService.js";
 import SwiperCore, { Navigation, EffectFlip } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
 
@@ -62,8 +67,7 @@ export default {
   },
   methods: {
     getTalks() {
-      axios
-        .get("http://localhost:3000/talks")
+      TalkService.getTalks()
         .then((response) => {
           const data = response.data;
           this.baseURL = data.baseURL;
@@ -95,6 +99,7 @@ export default {
 
 <style lang="scss" scoped>
 .slider {
+  flex: 0 0 50%;
   display: flex;
   justify-content: center;
   align-items: center;
