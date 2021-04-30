@@ -1,6 +1,17 @@
 <template>
   <div class="searchBar">
-    <input v-model="input" :placeholder="title" />
+    <!-- <input v-model="input" :placeholder="title" />
+    <div v-if="filtered.length > 0" class="searchBar__list">
+      <BaseCheckbox
+        v-for="param in filtered"
+        :key="param._id"
+        :modelValue="modelValue"
+        :label="param.search"
+        :value="param.search"
+        @update:modelValue="$emit('update:modelValue', $event)"
+        class="searchBar__list--item"
+      />
+    </div> -->
     <ul v-if="filtered.length > 0" class="searchBar__list">
       <li
         v-for="param in filtered"
@@ -14,9 +25,26 @@
 </template>
 
 <script>
+//import BaseCheckbox from "@/components/base/BaseCheckbox.vue";
 import { debounce } from "@/services/tools.js";
 export default {
-  props: ["title", "list"],
+  // components: {
+  //   BaseCheckbox,
+  // },
+  props: {
+    // modelValue: {
+    //   type: Array,
+    //   required: true,
+    // },
+    title: {
+      type: String,
+      default: "",
+    },
+    list: {
+      type: Array,
+      required: true,
+    },
+  },
   data() {
     return {
       input: "",

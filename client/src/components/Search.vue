@@ -1,9 +1,11 @@
 <template>
   <div class="search">
     <span>Search Here!</span>
-    <SearchBar title="Conferences" :list="searchParams.conferences" />
-    <SearchBar title="Speakers" :list="searchParams.speakers" />
-    <SearchBar title="Topics" :list="searchParams.topics" />
+    <div v-if="searchParams.length">
+      <SearchBar title="Conferences" :list="searchParams.conferences" />
+      <SearchBar title="Speakers" :list="searchParams.speakers" />
+      <SearchBar title="Topics" :list="searchParams.topics" />
+    </div>
   </div>
 </template>
 
