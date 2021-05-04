@@ -2,7 +2,12 @@
   <div class="slider">
     <div class="slider__container">
       <div class="slider__dummy"></div>
-      <swiper effect="flip" navigation :slides-per-view="3">
+      <swiper
+        v-if="talks.length > 0"
+        effect="flip"
+        navigation
+        slides-per-view="3"
+      >
         <swiper-slide v-for="(talk, index) in talks" :key="index">
           <div class="slider__content">
             <a
@@ -37,7 +42,7 @@
 </template>
 
 <script>
-import axios from "axios";
+//import TalkService from "@/services/TalkService.js";
 import SwiperCore, { Navigation, EffectFlip } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
 
@@ -49,31 +54,43 @@ import "swiper/components/navigation/navigation.scss";
 SwiperCore.use([Navigation, EffectFlip]);
 
 export default {
+  inject: ["GTalks"],
   components: {
     Swiper,
     SwiperSlide,
   },
   data() {
     return {
-      talks: [],
-      baseURL: "",
-      language: "",
+      random: null,
     };
   },
-  methods: {
-    getTalks() {
-      axios
-        .get("http://localhost:3000/talks")
-        .then((response) => {
-          const data = response.data;
-          this.baseURL = data.baseURL;
-          this.language = data.language;
-          this.talks = data.talks;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+  computed: {
+    baseURL() {
+      return this.GTalks.talks.baseURL;
     },
+    language() {
+      return this.GTalks.talks.language;
+    },
+    talks() {
+      let talksArr = this.GTalks.talks?.talks;
+      if (!talksArr) return [];
+      let currentIndex = talksArr.length,
+        tempValue,
+        randomIndex;
+      while (currentIndex !== 0) {
+        randomIndex = Math.floor(
+          (this.random ? this.random : Math.random()) * currentIndex
+        );
+        currentIndex -= 1;
+
+        tempValue = talksArr[currentIndex];
+        talksArr[currentIndex] = talksArr[randomIndex];
+        talksArr[randomIndex] = tempValue;
+      }
+      return talksArr;
+    },
+  },
+  methods: {
     fullUrl(input) {
       return this.baseURL + input + this.language;
     },
@@ -88,13 +105,14 @@ export default {
     },
   },
   created() {
-    this.getTalks();
+    this.random = Math.random();
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .slider {
+  flex: 0 0 50%;
   display: flex;
   justify-content: center;
   align-items: center;
