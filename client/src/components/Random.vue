@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import TalkService from "@/services/TalkService.js";
+//import TalkService from "@/services/TalkService.js";
 import SwiperCore, { Navigation, EffectFlip } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
 
@@ -54,30 +54,42 @@ import "swiper/components/navigation/navigation.scss";
 SwiperCore.use([Navigation, EffectFlip]);
 
 export default {
+  inject: ["GTalks"],
   components: {
     Swiper,
     SwiperSlide,
   },
-  data() {
-    return {
-      talks: [],
-      baseURL: "",
-      language: "",
-    };
+  // data() {
+  //   return {
+  //     talks: [],
+  //     baseURL: "",
+  //     language: "",
+  //   };
+  // },
+  computed: {
+    baseURL() {
+      return this.GTalks.talks.baseURL;
+    },
+    language() {
+      return this.GTalks.talks.language;
+    },
+    talks() {
+      return this.GTalks.talks.talks ? this.GTalks.talks.talks : [];
+    },
   },
   methods: {
-    getTalks() {
-      TalkService.getTalks()
-        .then((response) => {
-          const data = response.data;
-          this.baseURL = data.baseURL;
-          this.language = data.language;
-          this.talks = data.talks;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
+    // getTalks() {
+    //   TalkService.getTalks()
+    //     .then((response) => {
+    //       const data = response.data;
+    //       this.baseURL = data.baseURL;
+    //       this.language = data.language;
+    //       this.talks = data.talks;
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // },
     fullUrl(input) {
       return this.baseURL + input + this.language;
     },
@@ -91,9 +103,9 @@ export default {
       return conf.trim();
     },
   },
-  created() {
-    this.getTalks();
-  },
+  // created() {
+  //   this.getTalks();
+  // },
 };
 </script>
 

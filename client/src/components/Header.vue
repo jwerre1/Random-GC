@@ -11,7 +11,7 @@
 
 <style lang="scss" scoped>
 .header {
-  background-color: var(--color-grey-5);
+  background-color: var(--color-grey-4);
   font-family: "Libre Baskerville", serif;
   padding: 0.5rem 1rem;
 

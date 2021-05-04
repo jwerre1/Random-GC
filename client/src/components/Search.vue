@@ -1,26 +1,53 @@
 <template>
   <div class="search">
-    <span>Search Here!</span>
-    <div v-if="searchParams.length">
-      <SearchBar title="Conferences" :list="searchParams.conferences" />
-      <SearchBar title="Speakers" :list="searchParams.speakers" />
-      <SearchBar title="Topics" :list="searchParams.topics" />
+    <SelectedParams />
+    <button @click="submitSearch">Get Talks</button>
+    <div v-if="searchParams">
+      <SearchBar
+        title="Conferences"
+        :list="searchParams.conferences"
+        :collection="'conferences'"
+      />
+      <SearchBar
+        title="Speakers"
+        :list="searchParams.speakers"
+        :collection="'speakers'"
+      />
+      <SearchBar
+        title="Topics"
+        :list="searchParams.topics"
+        :collection="'topics'"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import SelectedParams from "@/components/selected/Layout.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import TalkService from "@/services/TalkService.js";
 
 export default {
+  inject: ["GTalks"],
   components: {
+    SelectedParams,
     SearchBar,
   },
   data() {
     return {
-      searchParams: [],
+      searchParams: null,
     };
+  },
+  methods: {
+    submitSearch() {
+      TalkService.submitSearch()
+        .then((response) => {
+          this.GTalks.talks = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
   created() {
     TalkService.getSearchParams()

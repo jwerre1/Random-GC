@@ -6,4 +6,6 @@ const router = express.Router();
 
 router.get('/', talksController.getAllTalks);
 
+router.post('/search', talksController.getSearchTalks);
+
 module.exports = router;

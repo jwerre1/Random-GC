@@ -1,22 +1,12 @@
 <template>
   <div class="searchBar">
-    <!-- <input v-model="input" :placeholder="title" />
-    <div v-if="filtered.length > 0" class="searchBar__list">
-      <BaseCheckbox
-        v-for="param in filtered"
-        :key="param._id"
-        :modelValue="modelValue"
-        :label="param.search"
-        :value="param.search"
-        @update:modelValue="$emit('update:modelValue', $event)"
-        class="searchBar__list--item"
-      />
-    </div> -->
+    <input v-model="input" :placeholder="title" />
     <ul v-if="filtered.length > 0" class="searchBar__list">
       <li
         v-for="param in filtered"
         :key="param._id"
         class="searchBar__list--item"
+        @click="selected(param)"
       >
         {{ param.search }}
       </li>
@@ -25,23 +15,20 @@
 </template>
 
 <script>
-//import BaseCheckbox from "@/components/base/BaseCheckbox.vue";
 import { debounce } from "@/services/tools.js";
 export default {
-  // components: {
-  //   BaseCheckbox,
-  // },
+  inject: ["GStore"],
   props: {
-    // modelValue: {
-    //   type: Array,
-    //   required: true,
-    // },
     title: {
       type: String,
       default: "",
     },
     list: {
       type: Array,
+      required: true,
+    },
+    collection: {
+      type: String,
       required: true,
     },
   },
@@ -56,6 +43,7 @@ export default {
       if (this.dbInput === "") return [];
       const regex = new RegExp("^.*" + this.dbInput.toLowerCase() + ".*$");
       return this.list.filter((el) => {
+        if (this.GStore[this.collection].indexOf(el.search) > -1) return false;
         return regex.test(el.search.toLowerCase());
       });
     },
@@ -64,6 +52,11 @@ export default {
     input: debounce(function (val) {
       this.dbInput = val;
     }, 500),
+  },
+  methods: {
+    selected(param) {
+      this.GStore[this.collection].push(param.search);
+    },
   },
 };
 </script>

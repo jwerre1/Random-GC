@@ -1,4 +1,5 @@
-import axios from 'axios'
+import axios from "axios";
+import GStore from "../store";
 
 const apiClient = axios.create({
   baseURL: "http://localhost:3000",
@@ -15,5 +16,8 @@ export default {
   },
   getSearchParams() {
     return apiClient.get("/search");
+  },
+  submitSearch() {
+    return apiClient.post("/talks/search", GStore);
   }
 }

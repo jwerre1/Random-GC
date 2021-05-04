@@ -1,24 +1,14 @@
 <template>
-  <div class="container">
-    <Header />
-    <div class="content">
-      <Random />
-      <Search />
-    </div>
-  </div>
+  <Main />
 </template>
 
 <script>
-import Header from "@/components/Header.vue";
-import Random from "@/components/Random.vue";
-import Search from "@/components/Search.vue";
+import Main from "@/views/Main.vue";
 
 export default {
   name: "App",
   components: {
-    Header,
-    Random,
-    Search,
+    Main,
   },
 };
 </script>
@@ -30,20 +20,20 @@ export default {
 *::before {
   margin: 0;
   padding: 0;
-  box-sizing: border-box; /*& force elements to inherit box-sizing property set in html &*/
+  box-sizing: border-box; /* force elements to inherit box-sizing property set in html */
 }
 
 :root {
   --slider-sqr: 50rem;
   --slider-sqr-small: 75vw;
   --color-font-black: rgb(0, 0, 0);
-  --color-white: rgb(255, 255, 255);
-  --color-grey-1: rgb(208, 211, 211);
-  --color-grey-2: rgb(220, 222, 222);
-  --color-grey-3: rgb(231, 233, 233);
-  --color-grey-4: rgb(243, 244, 244);
-  --color-grey-5: rgb(252, 252, 252);
-  --color-blue: rgb(21, 116, 147);
+  --color-white: hsl(0, 0%, 100%);
+  --color-grey-1: hsl(180, 4%, 70%);
+  --color-grey-2: hsl(180, 4%, 80%);
+  --color-grey-3: hsl(180, 4%, 90%);
+  --color-grey-4: hsl(180, 4%, 95%);
+  --color-blue-light: hsl(196, 75%, 40%);
+  --color-blue-dark: hsl(196, 100%, 24%);
 }
 
 html {
@@ -54,26 +44,13 @@ html {
 }
 
 body {
-  background-color: var(--color-grey-4);
-}
-
-.container {
-  width: 100%;
-  max-width: 120rem;
-  margin: 8rem auto;
-  background-color: var(--color-white);
-}
-
-.content {
-  display: flex;
-}
-
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin: 6rem auto;
+  background-color: var(--color-blue-dark);
+  background-image: linear-gradient(
+    to right bottom,
+    var(--color-blue-light),
+    var(--color-blue-dark)
+  );
+  background-size: cover;
+  background-repeat: no-repeat; //prevents background from repeating beyond body element
 }
 </style>
