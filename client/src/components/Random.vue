@@ -6,7 +6,7 @@
         v-if="talks.length > 0"
         effect="flip"
         navigation
-        :slides-per-view="3"
+        slides-per-view="3"
       >
         <swiper-slide v-for="(talk, index) in talks" :key="index">
           <div class="slider__content">
@@ -59,13 +59,11 @@ export default {
     Swiper,
     SwiperSlide,
   },
-  // data() {
-  //   return {
-  //     talks: [],
-  //     baseURL: "",
-  //     language: "",
-  //   };
-  // },
+  data() {
+    return {
+      random: null,
+    };
+  },
   computed: {
     baseURL() {
       return this.GTalks.talks.baseURL;
@@ -74,22 +72,25 @@ export default {
       return this.GTalks.talks.language;
     },
     talks() {
-      return this.GTalks.talks.talks ? this.GTalks.talks.talks : [];
+      let talksArr = this.GTalks.talks?.talks;
+      if (!talksArr) return [];
+      let currentIndex = talksArr.length,
+        tempValue,
+        randomIndex;
+      while (currentIndex !== 0) {
+        randomIndex = Math.floor(
+          (this.random ? this.random : Math.random()) * currentIndex
+        );
+        currentIndex -= 1;
+
+        tempValue = talksArr[currentIndex];
+        talksArr[currentIndex] = talksArr[randomIndex];
+        talksArr[randomIndex] = tempValue;
+      }
+      return talksArr;
     },
   },
   methods: {
-    // getTalks() {
-    //   TalkService.getTalks()
-    //     .then((response) => {
-    //       const data = response.data;
-    //       this.baseURL = data.baseURL;
-    //       this.language = data.language;
-    //       this.talks = data.talks;
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // },
     fullUrl(input) {
       return this.baseURL + input + this.language;
     },
@@ -103,9 +104,9 @@ export default {
       return conf.trim();
     },
   },
-  // created() {
-  //   this.getTalks();
-  // },
+  created() {
+    this.random = Math.random();
+  },
 };
 </script>
 

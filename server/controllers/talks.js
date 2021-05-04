@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Talk = require('../models/Talk');
 
 const baseURL = 'https://www.churchofjesuschrist.org';
@@ -10,8 +11,7 @@ const allTalks = async () => {
     { $lookup: { from: 'speakers', localField: 'speaker', foreignField: '_id', as: 'speaker' } },
     { $lookup: { from: 'conferences', localField: 'conference', foreignField: '_id', as: 'conference' } },
     { $lookup: { from: 'topics', localField: 'topics', foreignField: '_id', as: 'topics' } },
-  ]);//.sample(100);
-  //await talks.populate('speaker').populate('conference').populate('topics').execPopulate();
+  ]);
   return {
     baseURL,
     language,
@@ -29,9 +29,12 @@ exports.getAllTalks = async (req, res, next) => {
 }
 
 exports.getSearchTalks = async (req, res, next) => {
+  //console.log(req.body);
   const conferences = req.body.conferences,
     speakers = req.body.speakers,
     topics = req.body.topics;
+  let searchArray = [];
+  //if no search params passed in...
   if (!conferences.length && !speakers.length && !topics.length) {
     console.log('no search params')
     try {
@@ -40,5 +43,42 @@ exports.getSearchTalks = async (req, res, next) => {
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
+    console.log('should not get down here');
+    return;
+  }
+  if (conferences.length) {
+    searchArray = [...searchArray, {
+      $match: {
+        $or: [...conferences.map(x => { return { 'conference': mongoose.Types.ObjectId(x._id) } })]
+      }
+    }]
+  }
+  if (speakers.length) {
+    searchArray = [...searchArray, {
+      $match: {
+        $or: [...speakers.map(x => { return { 'speaker': mongoose.Types.ObjectId(x._id) } })]
+      }
+    }]
+  }
+  if (topics.length) {
+    searchArray = [...searchArray, {
+      $match: {
+        $or: [...topics.map(x => { return { 'topics': mongoose.Types.ObjectId(x._id) } })]
+      }
+    }]
+  }
+  try {
+    const talks = await Talk.aggregate([...searchArray,
+    { $lookup: { from: 'speakers', localField: 'speaker', foreignField: '_id', as: 'speaker' } },
+    { $lookup: { from: 'conferences', localField: 'conference', foreignField: '_id', as: 'conference' } },
+    { $lookup: { from: 'topics', localField: 'topics', foreignField: '_id', as: 'topics' } },
+    ]);
+    res.json({
+      baseURL,
+      language,
+      talks
+    })
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 }

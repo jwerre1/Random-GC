@@ -43,7 +43,12 @@ export default {
       if (this.dbInput === "") return [];
       const regex = new RegExp("^.*" + this.dbInput.toLowerCase() + ".*$");
       return this.list.filter((el) => {
-        if (this.GStore[this.collection].indexOf(el.search) > -1) return false;
+        if (
+          this.GStore[this.collection]
+            .map((val) => val.search)
+            .indexOf(el.search) > -1
+        )
+          return false;
         return regex.test(el.search.toLowerCase());
       });
     },
@@ -55,7 +60,7 @@ export default {
   },
   methods: {
     selected(param) {
-      this.GStore[this.collection].push(param.search);
+      this.GStore[this.collection].push(param);
     },
   },
 };

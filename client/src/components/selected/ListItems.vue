@@ -1,6 +1,6 @@
 <template>
   <li v-for="item in list" :key="item" @click="remove(item)">
-    {{ item }}
+    {{ item.search }}
   </li>
 </template>
 
@@ -11,7 +11,7 @@ export default {
   methods: {
     remove(param) {
       this.GStore[this.name] = this.GStore[this.name].filter((el) => {
-        return el !== param;
+        return el._id !== param._id;
       });
     },
   },
