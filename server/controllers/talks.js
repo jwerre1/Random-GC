@@ -19,6 +19,17 @@ const allTalks = async () => {
   }
 }
 
+const emptySlide = [{
+  conference: [],
+  speaker: [{
+    name: "Please Update Search Selections",
+    search: "Please Update Search Selections"
+  }],
+  title: "Talks Not Found",
+  topics: [],
+  url: ""
+}];
+
 exports.getAllTalks = async (req, res, next) => {
   try {
     const talks = await allTalks();
@@ -43,7 +54,6 @@ exports.getSearchTalks = async (req, res, next) => {
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
-    console.log('should not get down here');
     return;
   }
   if (conferences.length) {
@@ -73,11 +83,19 @@ exports.getSearchTalks = async (req, res, next) => {
     { $lookup: { from: 'conferences', localField: 'conference', foreignField: '_id', as: 'conference' } },
     { $lookup: { from: 'topics', localField: 'topics', foreignField: '_id', as: 'topics' } },
     ]);
-    res.json({
-      baseURL,
-      language,
-      talks
-    })
+    if (talks.length === 0) {
+      res.json({
+        baseURL,
+        language,
+        talks: emptySlide
+      })
+    } else {
+      res.json({
+        baseURL,
+        language,
+        talks
+      })
+    }
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
