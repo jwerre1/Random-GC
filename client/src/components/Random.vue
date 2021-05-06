@@ -7,6 +7,7 @@
         effect="flip"
         navigation
         slides-per-view="3"
+        @swiper="onSwiper"
       >
         <swiper-slide v-for="(talk, index) in talks" :key="index">
           <div class="slider__content">
@@ -18,13 +19,16 @@
               <div class="slider__content--title">
                 {{ talk.title }}
               </div>
-              <div class="slider__content--speaker">
+              <div v-if="talk.speaker[0]" class="slider__content--speaker">
                 {{ getSpeaker(talk) }}
               </div>
-              <div class="slider__content--conference">
+              <div
+                v-if="talk.conference[0]"
+                class="slider__content--conference"
+              >
                 {{ getConference(talk) }}
               </div>
-              <div class="slider__content--topics">
+              <div v-if="talk.topics.length" class="slider__content--topics">
                 <span
                   v-for="(topic, index) in talk.topics"
                   :key="talk.url + '_' + index"
@@ -62,6 +66,7 @@ export default {
   data() {
     return {
       random: null,
+      swiper: null, // swiper object
     };
   },
   computed: {
@@ -90,22 +95,37 @@ export default {
       return talksArr;
     },
   },
+  watch: {
+    talks: function () {
+      this.setRandom();
+      if (this.swiper) this.swiper.slideTo(0, 0); // Reset back to the first slide
+    },
+  },
   methods: {
+    onSwiper(obj) {
+      this.swiper = obj;
+    },
     fullUrl(input) {
-      return this.baseURL + input + this.language;
+      return input ? this.baseURL + input + this.language : "#";
     },
     getSpeaker(input) {
       return input.speaker[0]?.name || "";
     },
     getConference(input) {
-      if (!input.conference[0]) return "";
-      const conf =
-        input.conference[0].month + " " + input.conference[0].year.toString();
-      return conf.trim();
+      return input.conference[0]
+        ? (
+            input.conference[0].month +
+            " " +
+            input.conference[0].year.toString()
+          ).trim()
+        : "";
+    },
+    setRandom() {
+      this.random = Math.random();
     },
   },
   created() {
-    this.random = Math.random();
+    this.setRandom();
   },
 };
 </script>

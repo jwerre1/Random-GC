@@ -2,6 +2,9 @@
   <div class="search">
     <SelectedParams />
     <button @click="submitSearch">Get Talks</button>
+    <button v-show="foundParams" @click="clearParams">
+      Clear Selection<span v-show="foundParams > 1">s</span>
+    </button>
     <div v-if="searchParams">
       <SearchBar
         title="Conferences"
@@ -28,7 +31,7 @@ import SearchBar from "@/components/SearchBar.vue";
 import TalkService from "@/services/TalkService.js";
 
 export default {
-  inject: ["GTalks"],
+  inject: ["GStore", "GTalks"],
   components: {
     SelectedParams,
     SearchBar,
@@ -38,15 +41,30 @@ export default {
       searchParams: null,
     };
   },
+  computed: {
+    foundParams() {
+      let count = 0;
+      for (const prop in this.GStore) {
+        count += this.GStore[prop].length;
+      }
+      return count;
+    },
+  },
   methods: {
     submitSearch() {
       TalkService.submitSearch()
         .then((response) => {
+          console.log(response.data);
           this.GTalks.talks = response.data;
         })
         .catch((error) => {
           console.log(error);
         });
+    },
+    clearParams() {
+      for (const prop in this.GStore) {
+        this.GStore[prop] = [];
+      }
     },
   },
   created() {
