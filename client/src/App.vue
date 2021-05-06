@@ -15,6 +15,7 @@ export default {
 
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap");
+
 *,
 *::after,
 *::before {
@@ -32,8 +33,17 @@ export default {
   --color-grey-2: hsl(180, 4%, 80%);
   --color-grey-3: hsl(180, 4%, 90%);
   --color-grey-4: hsl(180, 4%, 95%);
-  --color-blue-light: hsl(196, 75%, 40%);
+  --color-blue-light-1: hsl(196, 75%, 55%);
+  --color-blue-light-2: hsl(196, 75%, 40%);
   --color-blue-dark: hsl(196, 100%, 24%);
+
+  --color-btn1: hsl(188, 99%, 41%);
+  --color-btn2: hsl(194, 74%, 35%);
+
+  --fontsize-title: 2.4rem;
+  --fontsize-speaker: 1.8rem;
+  --fontsize-conference: 1.6rem;
+  --fontsize-topic-item: 1.4rem;
 }
 
 html {
@@ -47,7 +57,7 @@ body {
   background-color: var(--color-blue-dark);
   background-image: linear-gradient(
     to right bottom,
-    var(--color-blue-light),
+    var(--color-blue-light-2),
     var(--color-blue-dark)
   );
   background-size: cover;

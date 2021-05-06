@@ -7,7 +7,7 @@
         effect="flip"
         navigation
         slides-per-view="3"
-        @swiper="onSwiper"
+        @swiper="initSwiper"
       >
         <swiper-slide v-for="(talk, index) in talks" :key="index">
           <div class="slider__content">
@@ -102,7 +102,7 @@ export default {
     },
   },
   methods: {
-    onSwiper(obj) {
+    initSwiper(obj) {
       this.swiper = obj;
     },
     fullUrl(input) {
@@ -131,6 +131,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/scss/_mixins.scss";
 .slider {
   flex: 0 0 50%;
   display: flex;
@@ -145,8 +146,9 @@ export default {
     width: 100%;
     background: var(--color-white);
 
-    font-family: "Libre Baskerville", serif;
-    font-weight: 400;
+    @include google-font;
+    //font-family: "Libre Baskerville", serif;
+    //font-weight: 400;
   }
 
   &__dummy {
@@ -170,16 +172,16 @@ export default {
     }
 
     &--title {
-      font-size: 2.4rem;
+      font-size: var(--fontsize-title);
     }
 
     &--speaker {
-      font-size: 1.8rem;
+      font-size: var(--fontsize-speaker);
       padding-top: 1rem;
     }
 
     &--conference {
-      font-size: 1.6rem;
+      font-size: var(--fontsize-conference);
       padding-top: 1rem;
     }
 
@@ -190,7 +192,7 @@ export default {
     &--topic-item {
       list-style: none;
       text-transform: capitalize;
-      font-size: 1.4rem;
+      font-size: var(--fontsize-topic-item);
     }
   }
 }
