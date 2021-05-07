@@ -19,7 +19,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 * {
   line-height: var(--fontsize-title);
 }
@@ -32,5 +32,9 @@ span {
 
 .item {
   cursor: pointer;
+
+  &:hover {
+    color: var(--color-red);
+  }
 }
 </style>

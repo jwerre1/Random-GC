@@ -131,7 +131,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/scss/_mixins.scss";
+@use "@/scss/_mixins.scss" as *;
+
 .slider {
   flex: 0 0 50%;
   display: flex;

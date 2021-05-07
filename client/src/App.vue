@@ -28,7 +28,7 @@ export default {
   --slider-sqr: 50rem;
   --slider-sqr-small: 75vw;
   --color-font-black: rgb(0, 0, 0);
-  --color-white: hsl(0, 0%, 100%);
+  --color-white: rgb(255, 255, 255);
   --color-grey-1: hsl(180, 4%, 70%);
   --color-grey-2: hsl(180, 4%, 80%);
   --color-grey-3: hsl(180, 4%, 90%);
@@ -37,6 +37,7 @@ export default {
   --color-blue-light-2: hsl(196, 75%, 40%);
   --color-blue-medium: hsl(196, 75%, 32%);
   --color-blue-dark: hsl(196, 100%, 24%);
+  --color-red: hsl(5, 87%, 33%);
 
   --color-btn1: hsl(188, 99%, 41%);
   --color-btn2: hsl(194, 74%, 35%);

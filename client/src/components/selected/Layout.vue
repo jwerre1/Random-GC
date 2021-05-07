@@ -18,6 +18,7 @@ export default {
 * {
   width: 85%;
 }
+
 .list-group:not(:last-of-type) {
   margin-bottom: 1rem;
 }

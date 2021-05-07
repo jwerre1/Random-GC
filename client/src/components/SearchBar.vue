@@ -77,7 +77,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/scss/_mixins.scss";
+@use "@/scss/_mixins.scss" as *;
 
 * {
   @include google-font;
