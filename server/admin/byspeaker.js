@@ -1,3 +1,8 @@
+/** Scrape from page that lists all speakers,
+ *  with links to page with all talks.
+ *  - Better for large scrapes (such as all available talks)
+ */
+
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
@@ -6,6 +11,8 @@ dotenv.config();
 const Talk = require('../models/Talk');
 const Speaker = require('../models/Speaker');
 const Conference = require('../models/Conference');
+
+const dbTools = require('./tools/db');
 
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
@@ -27,65 +34,6 @@ const conferenceLink = link => {
 
 const notPicture = link => (link.className.indexOf('omeqik-0') !== -1);
 
-const findTalk = async input => {
-  const returnValue = await Talk.findOne({ 'url': input }, (err, res) => {
-    if (err || !res) return 0;
-    return res._id;
-  });
-  return returnValue
-}
-
-const findSpeaker = async input => {
-  const returnValue = await Speaker.findOne({ 'name': input }, (err, res) => {
-    if (err || !res) return 0;
-    return res._id;
-  });
-  return returnValue
-}
-
-const setSpeaker = async input => {
-  const speaker = new Speaker({
-    name: input
-  });
-  try {
-    const savedSpeaker = await speaker.save();
-    console.log(`speaker ${savedSpeaker.name} saved!`);
-    return savedSpeaker._id;
-  } catch (error) {
-    console.log(error);
-    return 0;
-  }
-}
-
-const findConference = async input => {
-  const arr = input.split(' ');
-  const month = arr[0];
-  const year = parseInt(arr[1]);
-  const returnValue = await Conference.findOne({ 'month': month, 'year': year }, (err, res) => {
-    if (err || !res) return 0;
-    return res._id;
-  });
-  return returnValue
-}
-
-const setConference = async input => {
-  const arr = input.split(' ');
-  const month = arr[0];
-  const year = parseInt(arr[1]);
-  const conference = new Conference({
-    year,
-    month
-  });
-  try {
-    const savedConference = await conference.save();
-    console.log(`conference ${savedConference.month} ${savedConference.year} saved!`);
-    return savedConference._id;
-  } catch (error) {
-    console.log(error);
-    return 0;
-  }
-}
-
 (() => {
   mongoose.connect(
     process.env.DB_CONNECT,
@@ -105,9 +53,9 @@ const setConference = async input => {
       for (const link of links) {
         const speakerLink = baseURL + link.href + language;
         const speaker = link.querySelector('h4').textContent;
-        let speakerID = await findSpeaker(speaker);
-        if (!speakerID) speakerID = await setSpeaker(speaker);
-        if (!speakerID) {
+        let speakerObj = await dbTools.findSpeaker(speaker);
+        if (!speakerObj) speakerObj = await dbTools.setSpeaker(speaker);
+        if (!speakerObj) {
           console.log(`ERROR: Couldn't process speaker ${speaker}.`)
           continue speakerLoop; //error finding/creating speaker
         }
@@ -119,17 +67,17 @@ const setConference = async input => {
         talkLoop:
         for (const talk of talks) {
           const talkLink = talk.href;
-          const talkID = await findTalk(talkLink);
-          if (talkID) {
+          const talkObj = await dbTools.findTalk(talkLink);
+          if (talkObj) {
             console.log(`No Update: Talk saved previously ${talkLink}`);
             continue talkLoop; //Talk already saved.
           }
 
           const title = talk.querySelector('h4').textContent;
           const conference = talk.querySelector('h6').textContent;
-          let conferenceID = await findConference(conference);
-          if (!conferenceID) conferenceID = await setConference(conference);
-          if (!conferenceID) {
+          let conferenceObj = await dbTools.findConference(conference);
+          if (!conferenceObj) conferenceObj = await dbTools.setConference(conference);
+          if (!conferenceObj) {
             console.log(`ERROR: Couldn't process conference ${conference}.`)
             continue talkLoop; //error finding/creating conference
           }
@@ -137,8 +85,8 @@ const setConference = async input => {
           const newTalk = new Talk({
             title: title,
             url: talkLink,
-            speaker: speakerID,
-            conference: conferenceID
+            speaker: speakerObj._id,
+            conference: conferenceObj._id
           });
           try {
             const savedTalk = await newTalk.save();

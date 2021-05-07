@@ -1,3 +1,8 @@
+/** Scrape by session, from "home" page that lists all talks for given session
+ *  - scrape name and links from side bar -> provides speaker naming consistency
+ *    - no titles (Elder, Sister, etc.)
+ */
+
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
@@ -7,10 +12,13 @@ const Talk = require('../models/Talk');
 const Speaker = require('../models/Speaker');
 const Conference = require('../models/Conference');
 
+const dbTools = require('./tools/db');
+
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 const axios = require('axios');
 
+// Set start and end date + months for scrape
 const parms = {
   start: 1971,
   end: 2021,
@@ -26,65 +34,6 @@ const conferenceLink = link => {
 }
 
 const sidebar = link => (link.className.indexOf('item-3cCP7') !== -1);
-
-const findTalk = async input => {
-  const returnValue = await Talk.findOne({ 'url': input }, (err, res) => {
-    if (err || !res) return 0;
-    return res._id;
-  });
-  return returnValue
-}
-
-const findSpeaker = async input => {
-  const returnValue = await Speaker.findOne({ 'name': input }, (err, res) => {
-    if (err || !res) return 0;
-    return res._id;
-  });
-  return returnValue
-}
-
-const setSpeaker = async input => {
-  const speaker = new Speaker({
-    name: input
-  });
-  try {
-    const savedSpeaker = await speaker.save();
-    console.log(`speaker ${savedSpeaker.name} saved!`);
-    return savedSpeaker._id;
-  } catch (error) {
-    console.log(error);
-    return 0;
-  }
-}
-
-const findConference = async input => {
-  const arr = input.split(' ');
-  const month = arr[0];
-  const year = parseInt(arr[1]);
-  const returnValue = await Conference.findOne({ 'month': month, 'year': year }, (err, res) => {
-    if (err || !res) return 0;
-    return res._id;
-  });
-  return returnValue
-}
-
-const setConference = async input => {
-  const arr = input.split(' ');
-  const month = arr[0];
-  const year = parseInt(arr[1]);
-  const conference = new Conference({
-    year,
-    month
-  });
-  try {
-    const savedConference = await conference.save();
-    console.log(`conference ${savedConference.month} ${savedConference.year} saved!`);
-    return savedConference._id;
-  } catch (error) {
-    console.log(error);
-    return 0;
-  }
-}
 
 (() => {
   mongoose.connect(
@@ -114,9 +63,9 @@ const setConference = async input => {
           const links = await nodeList.filter(conferenceLink).filter(sidebar);
 
           const conference = dom.window.document.querySelector('h1').textContent;
-          let conferenceID = await findConference(conference);
-          if (!conferenceID) conferenceID = await setConference(conference);
-          if (!conferenceID) {
+          let conferenceObj = await dbTools.findConference(conference);
+          if (!conferenceObj) conferenceObj = await dbTools.setConference(conference);
+          if (!conferenceObj) {
             console.log(`ERROR: Couldn't process conference ${conference}.`)
             continue sessionLoop; //error finding/creating conference
           }
@@ -125,8 +74,8 @@ const setConference = async input => {
           for (const link of links) {
             const linkParts = link.href.split('?');
             const talkLink = linkParts[0];
-            const talkID = await findTalk(talkLink);
-            if (talkID) {
+            const talkObj = await dbTools.findTalk(talkLink);
+            if (talkObj) {
               console.log(`No Update: Talk saved previously ${talkLink}`);
               continue talkLoop; //Talk already saved.
             }
@@ -136,9 +85,9 @@ const setConference = async input => {
               continue talkLoop;
             }
             const speaker = speakerList[0].textContent;
-            let speakerID = await findSpeaker(speaker);
-            if (!speakerID) speakerID = await setSpeaker(speaker);
-            if (!speakerID) {
+            let speakerObj = await dbTools.findSpeaker(speaker);
+            if (!speakerObj) speakerObj = await dbTools.setSpeaker(speaker);
+            if (!speakerObj) {
               console.log(`ERROR: Couldn't process speaker ${speaker}.`);
               continue talkLoop; //error finding/creating speaker
             }
@@ -150,8 +99,8 @@ const setConference = async input => {
             const newTalk = new Talk({
               title: title,
               url: talkLink,
-              speaker: speakerID,
-              conference: conferenceID
+              speaker: speakerObj._id,
+              conference: conferenceObj._id
             });
             try {
               const savedTalk = await newTalk.save();
