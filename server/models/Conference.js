@@ -9,6 +9,10 @@ const conferenceSchema = new Schema({
   month: {
     type: String,
     required: true,
+  },
+  search: {
+    type: String,
+    required: true
   }
 });
 

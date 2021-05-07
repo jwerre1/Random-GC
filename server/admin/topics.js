@@ -45,9 +45,9 @@ const conferenceLink = link => {
       for (const link of links) {
         const topicLink = baseURL + link.href + language;
         const topicname = link.querySelector('h4').textContent;
-        let topicID = await dbTools.findTopic(topicname);
-        if (!topicID) topicID = await dbTools.setTopic(topicname);
-        if (!topicID) {
+        let topicObj = await dbTools.findTopic(topicname);
+        if (!topicObj) topicObj = await dbTools.setTopic(topicname);
+        if (!topicObj) {
           console.log(`ERROR: Couldn't process topic ${topicname}.`)
           continue topicLoop; //error finding/creating topic
         }
@@ -59,20 +59,23 @@ const conferenceLink = link => {
         talkLoop:
         for (const talk of talks) {
           const talkLink = talk.href;
-          const talkID = await dbTools.findTalk(talkLink);
-          if (!talkID) {
+          const talkObj = await dbTools.findTalk(talkLink);
+          if (!talkObj) {
             console.log(`ERROR: Couldn't locate talk ${talkLink}`);
             continue talkLoop; //Talk couldn't be found in database.
           }
 
+          const topicPrevProcessed = dbTools.findTalkTopic(talkObj, topicObj);
+          if (topicPrevProcessed) continue talkLoop; //Topic previously has been linked with talk
+
           try {
             const topicres = await Topic.updateOne(
-              { _id: topicID },
-              { $push: { talks: talkID } }
+              { _id: topicObj._id },
+              { $push: { talks: talkObj._id } }
             )
             const talkres = await Talk.updateOne(
-              { _id: talkID },
-              { $push: { topics: topicID } }
+              { _id: talkObj._id },
+              { $push: { topics: topicObj._id } }
             )
             console.log(`Updated: ${topicname} --- ${talkLink}`)
           } catch (error) {
