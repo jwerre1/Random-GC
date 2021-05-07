@@ -1,13 +1,6 @@
 <template>
-  <div class="selected-params">
-    <ul class="selected-params__list">
-      <ListItems
-        v-for="(prop, name) in GStore"
-        :key="name"
-        :list="prop"
-        :name="name"
-      />
-    </ul>
+  <div v-for="(prop, name) in GStore" :key="name" class="list-group">
+    <ListItems :list="prop" :name="name" />
   </div>
 </template>
 
@@ -20,3 +13,12 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+* {
+  width: 85%;
+}
+.list-group:not(:last-of-type) {
+  margin-bottom: 1rem;
+}
+</style>

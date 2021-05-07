@@ -1,11 +1,22 @@
 <template>
   <div class="search">
+    <div class="search__descr">
+      Add search parameters to specialize your random
+      <span class="inline-block"
+        >&nbsp;talks.
+        <svg class="search__descr--info">
+          <use xlink:href="@/assets/img/bootstrap-icons.svg#info-circle" />
+        </svg>
+      </span>
+    </div>
     <SelectedParams />
-    <button @click="submitSearch">Get Talks</button>
-    <button v-show="foundParams" @click="clearParams">
-      Clear Selection<span v-show="foundParams > 1">s</span>
-    </button>
-    <div v-if="searchParams">
+    <div class="search__btn-row">
+      <button class="search__btn" @click="submitSearch">Retrieve Talks</button>
+      <button class="search__btn" :disabled="!foundParams" @click="clearParams">
+        Clear Selection<span v-show="foundParams > 1">s</span>
+      </button>
+    </div>
+    <div v-if="searchParams" class="searchBars">
       <SearchBar
         title="Conferences"
         :list="searchParams.conferences"
@@ -54,7 +65,6 @@ export default {
     submitSearch() {
       TalkService.submitSearch()
         .then((response) => {
-          console.log(response.data);
           this.GTalks.talks = response.data;
         })
         .catch((error) => {
@@ -80,11 +90,70 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/scss/_mixins.scss";
+
+.inline-block {
+  display: inline-block;
+}
+
 .search {
+  @include google-font;
   flex: 0 0 50%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  &__descr {
+    font-size: var(--fontsize-speaker);
+    line-height: calc(var(--fontsize-speaker) * 1.5);
+    margin: 0 0.5rem 2rem 0.5rem;
+
+    &--info {
+      height: 1em; //parent === search__descr
+      width: 1em;
+      fill: var(--color-btn2);
+
+      &:hover {
+        fill: red;
+      }
+    }
+  }
+
+  &__btn-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  &__btn {
+    @include google-font;
+    font-size: var(--fontsize-topic-item);
+    background-image: linear-gradient(
+      to right,
+      var(--color-grey-3),
+      var(--color-grey-2)
+    );
+    color: var(--color-font-black);
+    padding: 0.7rem;
+
+    &:enabled {
+      cursor: pointer;
+      background-image: linear-gradient(
+        to right,
+        var(--color-btn1),
+        var(--color-btn2)
+      );
+      color: #fff;
+    }
+
+    &:not(:last-of-type) {
+      margin-right: 3rem;
+    }
+  }
+}
+
+.searchBars {
+  width: 90%;
 }
 </style>

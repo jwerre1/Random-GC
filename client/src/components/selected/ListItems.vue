@@ -1,7 +1,8 @@
 <template>
-  <li v-for="item in list" :key="item" @click="remove(item)">
-    {{ item.search }}
-  </li>
+  <span v-for="(item, index) in list" :key="item">
+    <span v-if="index > 0"> &nbsp;&nbsp;&bull;&nbsp;&nbsp; </span>
+    <span @click="remove(item)" class="item">{{ item.search }}</span>
+  </span>
 </template>
 
 <script>
@@ -19,7 +20,17 @@ export default {
 </script>
 
 <style scoped>
-li {
+* {
+  line-height: var(--fontsize-title);
+}
+
+span {
   text-transform: capitalize;
+  font-size: var(--fontsize-conference);
+  display: inline-block;
+}
+
+.item {
+  cursor: pointer;
 }
 </style>

@@ -44,6 +44,8 @@ export default {
 
 .content {
   display: flex;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
 #app {
