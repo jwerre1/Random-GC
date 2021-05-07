@@ -1,5 +1,14 @@
 <template>
   <div class="search">
+    <div class="search__descr">
+      Add search parameters to specialize your random
+      <span class="inline-block"
+        >&nbsp;talks.
+        <svg class="search__descr--info">
+          <use xlink:href="@/assets/img/bootstrap-icons.svg#info-circle" />
+        </svg>
+      </span>
+    </div>
     <SelectedParams />
     <div class="search__btn-row">
       <button class="search__btn" @click="submitSearch">Retrieve Talks</button>
@@ -83,6 +92,10 @@ export default {
 <style lang="scss" scoped>
 @import "@/scss/_mixins.scss";
 
+.inline-block {
+  display: inline-block;
+}
+
 .search {
   @include google-font;
   flex: 0 0 50%;
@@ -91,9 +104,26 @@ export default {
   justify-content: center;
   align-items: center;
 
+  &__descr {
+    font-size: var(--fontsize-speaker);
+    line-height: calc(var(--fontsize-speaker) * 1.5);
+    margin: 0 0.5rem 2rem 0.5rem;
+
+    &--info {
+      height: 1em; //parent === search__descr
+      width: 1em;
+      fill: var(--color-btn2);
+
+      &:hover {
+        fill: red;
+      }
+    }
+  }
+
   &__btn-row {
     display: flex;
     justify-content: center;
+    margin-bottom: 1rem;
   }
 
   &__btn {

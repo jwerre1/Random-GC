@@ -1,22 +1,24 @@
 <template>
-  <form action="#" class="search">
-    <input v-model="input" :placeholder="title" class="search__input" />
-    <button @click.prevent="clearSearch" class="search__button">
-      <svg :class="[{ hidden: !input }, 'search__clear']">
+  <form action="#" class="searchbar">
+    <input v-model="input" :placeholder="title" class="searchbar__input" />
+    <button @click.prevent="clearSearch" class="searchbar__button">
+      <svg :class="[{ hidden: !input }, 'searchbar__clear']">
         <use xlink:href="@/assets/img/bootstrap-icons.svg#x" />
       </svg>
     </button>
   </form>
-  <ul v-if="filtered.length > 0" class="list">
-    <li
-      v-for="param in filtered"
-      :key="param._id"
-      class="list__item"
-      @click="selected(param)"
-    >
-      {{ param.search }}
-    </li>
-  </ul>
+  <div class="list-container">
+    <ul v-if="filtered.length > 0" class="list">
+      <li
+        v-for="param in filtered"
+        :key="param._id"
+        class="list__item"
+        @click="selected(param)"
+      >
+        {{ param.search }}
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
@@ -81,7 +83,7 @@ export default {
   @include google-font;
 }
 
-.search {
+.searchbar {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -119,12 +121,29 @@ export default {
   }
 }
 
+.list-container {
+  display: flex;
+  justify-content: center;
+  margin-top: -0.5rem;
+}
+
 .list {
+  max-height: 20rem;
+  overflow-y: auto;
+  background-color: var(--color-grey-4);
+  width: 70%;
+  margin-right: -3.5rem;
+  border: 1px solid var(--color-grey-1);
   &__item {
     text-transform: capitalize;
     list-style: none;
     cursor: pointer;
     font-size: var(--fontsize-conference);
+
+    &:hover {
+      background-color: var(--color-blue-light-2);
+      color: var(--color-white);
+    }
   }
 }
 </style>

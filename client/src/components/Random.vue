@@ -177,12 +177,12 @@ export default {
 
     &--speaker {
       font-size: var(--fontsize-speaker);
-      padding-top: 1rem;
+      padding-top: 1.6rem;
     }
 
     &--conference {
       font-size: var(--fontsize-conference);
-      padding-top: 1rem;
+      padding-top: 1.2rem;
     }
 
     &--topics {

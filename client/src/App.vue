@@ -35,6 +35,7 @@ export default {
   --color-grey-4: hsl(180, 4%, 95%);
   --color-blue-light-1: hsl(196, 75%, 55%);
   --color-blue-light-2: hsl(196, 75%, 40%);
+  --color-blue-medium: hsl(196, 75%, 32%);
   --color-blue-dark: hsl(196, 100%, 24%);
 
   --color-btn1: hsl(188, 99%, 41%);
@@ -54,7 +55,7 @@ html {
 }
 
 body {
-  background-color: var(--color-blue-dark);
+  background-color: var(--color-blue-medium);
   background-image: linear-gradient(
     to right bottom,
     var(--color-blue-light-2),
