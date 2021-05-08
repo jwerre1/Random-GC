@@ -1,15 +1,24 @@
 const Talk = require('../../models/Talk');
 const Speaker = require('../../models/Speaker');
 const Conference = require('../../models/Conference');
-const Topic = require('../../models/Topic')
+const Topic = require('../../models/Topic');
 
 exports.findTalk = async input => {
-  const returnValue = await Talk.findOne({ 'url': input });
+  const returnValue = await Talk.findOne({ url: input });
   return returnValue; //return obj in case have to look up values
 }
 
+exports.upsertSpeaker = async input => {
+  const result = await Speaker.updateOne({ name: input }, { $set: { search: input } }, { upsert: true });
+  console.log(result);
+  if (result.upsertedCount > 0) {
+    console.log(`speaker ${result.name} saved!`);
+  }
+  return result;
+}
+
 exports.findSpeaker = async input => {
-  const returnValue = await Speaker.findOne({ 'name': input });
+  const returnValue = await Speaker.findOne({ name: input });
   return returnValue; //return obj in case have to look up values
 }
 
@@ -32,7 +41,7 @@ exports.findConference = async input => {
   const arr = input.split(' ');
   const month = arr[0];
   const year = parseInt(arr[1]);
-  const returnValue = await Conference.findOne({ 'month': month, 'year': year });
+  const returnValue = await Conference.findOne({ month, year });
   return returnValue; //return obj in case have to look up values
 }
 
@@ -60,7 +69,7 @@ exports.findTalkTopic = (talkObj, topicObj) => {
 }
 
 exports.findTopic = async input => {
-  const returnValue = await Topic.findOne({ 'topicname': input });
+  const returnValue = await Topic.findOne({ topicname: input });
   return returnValue; //return obj in case have to look up values
 }
 
