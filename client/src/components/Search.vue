@@ -4,11 +4,14 @@
       Add search parameters to specialize your random
       <span class="inline-block"
         >&nbsp;talks.
-        <svg class="search__descr--info">
-          <use xlink:href="@/assets/img/bootstrap-icons.svg#info-circle" />
-        </svg>
+        <span class="search__modal-click" @click="showModal = true">
+          <svg class="search__descr--info">
+            <use xlink:href="@/assets/img/bootstrap-icons.svg#info-circle" />
+          </svg>
+        </span>
       </span>
     </div>
+    <InstructionModal v-if="showModal" @click="showModal = false" />
     <SelectedParams />
     <div class="search__btn-row">
       <button class="search__btn" @click="submitSearch">Retrieve Talks</button>
@@ -39,6 +42,7 @@
 <script>
 import SelectedParams from "@/components/selected/Layout.vue";
 import SearchBar from "@/components/SearchBar.vue";
+import InstructionModal from "@/components/InstructionModal.vue";
 import TalkService from "@/services/TalkService.js";
 
 export default {
@@ -46,10 +50,12 @@ export default {
   components: {
     SelectedParams,
     SearchBar,
+    InstructionModal,
   },
   data() {
     return {
       searchParams: null,
+      showModal: false,
     };
   },
   computed: {
@@ -120,6 +126,10 @@ export default {
     }
   }
 
+  &__modal-click {
+    cursor: pointer;
+  }
+
   &__btn-row {
     display: flex;
     justify-content: center;
@@ -127,25 +137,7 @@ export default {
   }
 
   &__btn {
-    @include google-font;
-    font-size: var(--fontsize-topic-item);
-    background-image: linear-gradient(
-      to right,
-      var(--color-grey-3),
-      var(--color-grey-2)
-    );
-    color: var(--color-font-black);
-    padding: 0.7rem;
-
-    &:enabled {
-      cursor: pointer;
-      background-image: linear-gradient(
-        to right,
-        var(--color-btn1),
-        var(--color-btn2)
-      );
-      color: #fff;
-    }
+    @include default-btn;
 
     &:not(:last-of-type) {
       margin-right: 3rem;

@@ -2,3 +2,25 @@
   font-family: "Libre Baskerville", serif;
   font-weight: 400;
 }
+
+@mixin default-btn {
+  @include google-font;
+  font-size: var(--fontsize-topic-item);
+  background-image: linear-gradient(
+    to right,
+    var(--color-grey-3),
+    var(--color-grey-2)
+  );
+  color: var(--color-font-black);
+  padding: 0.7rem;
+
+  &:enabled {
+    cursor: pointer;
+    background-image: linear-gradient(
+      to right,
+      var(--color-btn1),
+      var(--color-btn2)
+    );
+    color: #fff;
+  }
+}
