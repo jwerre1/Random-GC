@@ -1,11 +1,11 @@
-const express = require('express');
+const express = require("express");
 
-const talksController = require('../controllers/talks');
+const talksController = require("../controllers/talks");
 
 const router = express.Router();
 
-router.get('/', talksController.getAllTalks);
+router.get("/", talksController.getAllTalks);
 
-router.post('/search', talksController.getSearchTalks);
+router.post("/search", talksController.getSearchTalks);
 
 module.exports = router;
