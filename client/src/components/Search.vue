@@ -98,10 +98,6 @@ export default {
 <style lang="scss" scoped>
 @use "@/scss/_mixins.scss" as *;
 
-.inline-block {
-  display: inline-block;
-}
-
 .search {
   @include google-font;
   flex: 0 0 50%;

@@ -65,4 +65,8 @@ body {
   background-size: cover;
   background-repeat: no-repeat; //prevents background from repeating beyond body element
 }
+
+.inline-block {
+  display: inline-block;
+}
 </style>

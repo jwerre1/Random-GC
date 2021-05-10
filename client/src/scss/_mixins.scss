@@ -8,19 +8,20 @@
   font-size: var(--fontsize-topic-item);
   background-image: linear-gradient(
     to right,
-    var(--color-grey-3),
-    var(--color-grey-2)
+    var(--color-btn1),
+    var(--color-btn2)
   );
-  color: var(--color-font-black);
+  color: #fff;
+  cursor: pointer;
   padding: 0.7rem;
 
-  &:enabled {
-    cursor: pointer;
+  &:disabled {
     background-image: linear-gradient(
       to right,
-      var(--color-btn1),
-      var(--color-btn2)
+      var(--color-grey-3),
+      var(--color-grey-2)
     );
-    color: #fff;
+    color: var(--color-font-black);
+    cursor: default;
   }
 }
