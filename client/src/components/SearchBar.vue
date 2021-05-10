@@ -61,7 +61,7 @@ export default {
     },
   },
   watch: {
-    input: debounce(function (val) {
+    input: debounce(function(val) {
       this.dbInput = val;
     }, 500),
   },

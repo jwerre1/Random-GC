@@ -96,7 +96,7 @@ export default {
     },
   },
   watch: {
-    talks: function () {
+    talks: function() {
       this.setRandom();
       if (this.swiper) this.swiper.slideTo(0, 0); // Reset back to the first slide
     },
