@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const topicSchema = new Schema({
@@ -8,8 +8,8 @@ const topicSchema = new Schema({
   },
   search: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 });
 
-module.exports = mongoose.model('Topic', topicSchema);
+module.exports = mongoose.model("Topic", topicSchema);

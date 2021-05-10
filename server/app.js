@@ -1,10 +1,10 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const cors = require('cors')
+const express = require("express");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const cors = require("cors");
 
-const talksRoutes = require('./routes/talks');
-const searchRoutes = require('./routes/search');
+const talksRoutes = require("./routes/talks");
+const searchRoutes = require("./routes/search");
 dotenv.config();
 
 const app = express();
@@ -20,7 +20,7 @@ mongoose.connect(
   () => console.log("connected to db")
 );
 
-app.use('/talks', talksRoutes);
-app.use('/search', searchRoutes);
+app.use("/talks", talksRoutes);
+app.use("/search", searchRoutes);
 
 app.listen(3000, () => console.log("server running"));

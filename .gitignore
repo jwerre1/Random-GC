@@ -105,3 +105,6 @@ dist
 
 # note file
 notes.txt
+
+# prettier files
+.prettier*

@@ -1,34 +1,59 @@
-const mongoose = require('mongoose');
-const Talk = require('../models/Talk');
+const mongoose = require("mongoose");
+const Talk = require("../models/Talk");
 
-const baseURL = 'https://www.churchofjesuschrist.org';
-const language = '?lang=eng';
+const baseURL = "https://www.churchofjesuschrist.org";
+const language = "?lang=eng";
 
 const allTalks = async () => {
   //use aggregate().sample() to get 100 random talks
   const talks = await Talk.aggregate([
     { $sample: { size: 100 } },
-    { $lookup: { from: 'speakers', localField: 'speaker', foreignField: '_id', as: 'speaker' } },
-    { $lookup: { from: 'conferences', localField: 'conference', foreignField: '_id', as: 'conference' } },
-    { $lookup: { from: 'topics', localField: 'topics', foreignField: '_id', as: 'topics' } },
+    {
+      $lookup: {
+        from: "speakers",
+        localField: "speaker",
+        foreignField: "_id",
+        as: "speaker",
+      },
+    },
+    {
+      $lookup: {
+        from: "conferences",
+        localField: "conference",
+        foreignField: "_id",
+        as: "conference",
+      },
+    },
+    {
+      $lookup: {
+        from: "topics",
+        localField: "topics",
+        foreignField: "_id",
+        as: "topics",
+      },
+    },
   ]);
   return {
     baseURL,
     language,
-    talks
-  }
-}
+    talks,
+  };
+};
 
-const emptySlide = [{
-  conference: [],
-  speaker: [{
-    name: "Please Update Search Selections",
-    search: "Please Update Search Selections"
-  }],
-  title: "No Talks Found",
-  topics: [],
-  url: ""
-}];
+const emptySlide = [
+  {
+    conference: [],
+    speaker: [
+      {
+        name: "Please Update Search Selections",
+        search: "Please Update Search Selections",
+      },
+    ],
+    title: "No Talks Found",
+    topics: [],
+    url: "",
+  },
+];
 
 exports.getAllTalks = async (req, res, next) => {
   try {
@@ -37,7 +62,7 @@ exports.getAllTalks = async (req, res, next) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-}
+};
 
 exports.getSearchTalks = async (req, res, next) => {
   const conferences = req.body.conferences,
@@ -58,31 +83,65 @@ exports.getSearchTalks = async (req, res, next) => {
   const addToSearchArray = function (arr) {
     searchArray.push({
       $match: {
-        $or: arr
-      }
+        $or: arr,
+      },
     });
-  }
+  };
   if (conferences.length)
-    addToSearchArray(conferences.map(x => { return { 'conference': mongoose.Types.ObjectId(x._id) } }))
+    addToSearchArray(
+      conferences.map((x) => {
+        return { conference: mongoose.Types.ObjectId(x._id) };
+      })
+    );
 
   if (speakers.length)
-    addToSearchArray(speakers.map(x => { return { 'speaker': mongoose.Types.ObjectId(x._id) } }));
+    addToSearchArray(
+      speakers.map((x) => {
+        return { speaker: mongoose.Types.ObjectId(x._id) };
+      })
+    );
 
   if (topics.length)
-    addToSearchArray(topics.map(x => { return { 'topics': mongoose.Types.ObjectId(x._id) } }));
+    addToSearchArray(
+      topics.map((x) => {
+        return { topics: mongoose.Types.ObjectId(x._id) };
+      })
+    );
 
   try {
-    const talks = await Talk.aggregate([...searchArray,
-    { $lookup: { from: 'speakers', localField: 'speaker', foreignField: '_id', as: 'speaker' } },
-    { $lookup: { from: 'conferences', localField: 'conference', foreignField: '_id', as: 'conference' } },
-    { $lookup: { from: 'topics', localField: 'topics', foreignField: '_id', as: 'topics' } },
+    const talks = await Talk.aggregate([
+      ...searchArray,
+      {
+        $lookup: {
+          from: "speakers",
+          localField: "speaker",
+          foreignField: "_id",
+          as: "speaker",
+        },
+      },
+      {
+        $lookup: {
+          from: "conferences",
+          localField: "conference",
+          foreignField: "_id",
+          as: "conference",
+        },
+      },
+      {
+        $lookup: {
+          from: "topics",
+          localField: "topics",
+          foreignField: "_id",
+          as: "topics",
+        },
+      },
     ]);
     res.json({
       baseURL,
       language,
-      talks: (talks.length === 0 ? emptySlide : talks)
-    })
+      talks: talks.length === 0 ? emptySlide : talks,
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-}
+};

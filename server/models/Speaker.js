@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const speakerSchema = new Schema({
@@ -8,8 +8,8 @@ const speakerSchema = new Schema({
   },
   search: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 });
 
-module.exports = mongoose.model('Speaker', speakerSchema);
+module.exports = mongoose.model("Speaker", speakerSchema);

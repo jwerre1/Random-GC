@@ -1,6 +1,6 @@
-const Conference = require('../models/Conference');
-const Speaker = require('../models/Speaker');
-const Topic = require('../models/Topic');
+const Conference = require("../models/Conference");
+const Speaker = require("../models/Speaker");
+const Topic = require("../models/Topic");
 
 exports.getSearchParams = async (req, res, next) => {
   try {
@@ -11,9 +11,9 @@ exports.getSearchParams = async (req, res, next) => {
     res.json({
       conferences,
       speakers,
-      topics
+      topics,
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-}
+};

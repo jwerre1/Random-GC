@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const conferenceSchema = new Schema({
@@ -12,8 +12,8 @@ const conferenceSchema = new Schema({
   },
   search: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 });
 
-module.exports = mongoose.model('Conference', conferenceSchema);
+module.exports = mongoose.model("Conference", conferenceSchema);
