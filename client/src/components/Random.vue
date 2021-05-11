@@ -131,15 +131,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use "@/scss/_variables.scss" as *;
 @use "@/scss/_mixins.scss" as *;
 
 .slider {
   flex: 0 0 50%;
   display: flex;
+  //flex-direction: column;
   justify-content: center;
   align-items: center;
 
-  margin-top: 10rem;
+  //margin-top: 10rem;
+
+  // @media only screen and (max-width: $bp-largest) {
+  //   margin: 0;
+  // }
 
   &__container {
     display: inline-block;
@@ -148,8 +154,6 @@ export default {
     background: var(--color-white);
 
     @include google-font;
-    //font-family: "Libre Baskerville", serif;
-    //font-weight: 400;
   }
 
   &__dummy {

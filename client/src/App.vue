@@ -14,6 +14,7 @@ export default {
 </script>
 
 <style lang="scss">
+@use "@/scss/_variables.scss" as *;
 @import url("https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap");
 
 *,
@@ -52,7 +53,9 @@ html {
   /* 62.5% of default font size (16px) = 10px = 1rem
       Used to calculate rem values */
   font-size: 62.5%;
-  /* box-sizing: border-box; */
+  @media only screen and (max-width: $bp-large) {
+    font-size: 50%;
+  }
 }
 
 body {

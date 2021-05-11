@@ -3,7 +3,7 @@
     <div class="search__descr">
       Add search parameters to specialize your random
       <span class="inline-block"
-        >&nbsp;talks.
+        >talks.
         <span class="search__modal-click" @click="showModal = true">
           <svg class="search__descr--info">
             <use xlink:href="@/assets/img/bootstrap-icons.svg#info-circle" />

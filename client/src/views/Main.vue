@@ -35,17 +35,32 @@ export default {
 </script>
 
 <style lang="scss">
+@use "@/scss/_variables.scss" as *;
+
 .container {
   width: 100%;
   max-width: 120rem;
   margin: 8rem auto;
   background-color: var(--color-white);
+
+  @media only screen and (max-width: $bp-largest) {
+    margin: 0;
+    max-width: 100%;
+  }
 }
 
 .content {
   display: flex;
   padding-top: 2rem;
   padding-bottom: 2rem;
+
+  @media only screen and (max-width: $bp-largest) {
+    padding: 0;
+  }
+
+  // @media only screen and (max-width: $bp-medium) {
+  //   flex-direction: column;
+  // }
 }
 
 #app {
@@ -53,7 +68,10 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
   margin: 6rem auto;
+
+  @media only screen and (max-width: $bp-largest) {
+    margin: 0;
+  }
 }
 </style>
