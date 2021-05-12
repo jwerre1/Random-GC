@@ -1,7 +1,6 @@
 <template>
   <div class="slider">
     <div class="slider__container">
-      <div class="slider__dummy"></div>
       <swiper
         v-if="talks.length > 0"
         effect="flip"
@@ -47,7 +46,7 @@
 
 <script>
 //import TalkService from "@/services/TalkService.js";
-import SwiperCore, { Navigation, EffectFlip } from "swiper";
+import SwiperCore, { Navigation, EffectFlip } from "swiper/core";
 import { Swiper, SwiperSlide } from "swiper/vue";
 
 import "swiper/swiper.scss";
@@ -134,30 +133,26 @@ export default {
 @use "@/scss/_variables.scss" as *;
 @use "@/scss/_mixins.scss" as *;
 
+* {
+  --slider-sqr: 50rem;
+  --slider-padding: 5rem;
+  --swiper-navigation-size: 4.4rem !important; // internal swiper variable for navigation arrows. default === 44px
+
+  @media only screen and (max-width: $bp-smallest) {
+    --slider-sqr: 40rem;
+    --slider-padding: 5rem;
+  }
+}
+
 .slider {
   flex: 0 0 50%;
-  display: flex;
-  //flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  //margin-top: 10rem;
-
-  // @media only screen and (max-width: $bp-largest) {
-  //   margin: 0;
-  // }
 
   &__container {
-    display: inline-block;
-    position: relative;
     width: 100%;
+    height: 100%;
     background: var(--color-white);
 
     @include google-font;
-  }
-
-  &__dummy {
-    margin-top: 100%;
   }
 
   &__content {
@@ -204,22 +199,14 @@ export default {
 
 .swiper {
   &-container {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    max-width: var(--slider-sqr);
-    height: 100%;
-    max-height: var(--slider-sqr);
-    padding: 5rem;
+    width: var(--slider-sqr);
+    height: var(--slider-sqr);
+    padding: var(--slider-padding);
   }
+
   &-slide {
-    width: 100%;
-    max-width: var(--slider-sqr);
-    height: 100%;
-    max-height: var(--slider-sqr);
+    width: var(--slider-sqr);
+    height: calc(var(--slider-sqr) - (var(--slider-padding) * 2));
     box-shadow: 0.5rem 2rem 5rem rgba(0, 0, 0, 0.175);
 
     &-active {

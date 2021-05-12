@@ -58,9 +58,9 @@ export default {
     padding: 0;
   }
 
-  // @media only screen and (max-width: $bp-medium) {
-  //   flex-direction: column;
-  // }
+  @media only screen and (max-width: $bp-medium) {
+    flex-direction: column;
+  }
 }
 
 #app {
