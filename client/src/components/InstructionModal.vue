@@ -4,12 +4,24 @@
       <div class="modal__wrapper">
         <div class="modal__container">
           <div class="modal__text">
-            <p>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sed,
-              temporibus atque? Vel dolorum ipsa eos repudiandae dolore. Vel
-              facere sequi porro praesentium illum nesciunt, aliquid reiciendis
-              perspiciatis voluptatem, numquam suscipit?
-            </p>
+            <div>
+              Talks will be selected that match at least one of a given criteria
+              for each category (Conferences, Speakers, or Topics). Categories
+              with no criteria will not be considered when selecting talks.
+            </div>
+            <div>
+              For example, to search all talks given by Russell M. Nelson given
+              during <span class="italics">either</span> the April 2018 or
+              October 2018 General Conference, select...
+              <ul>
+                <li>Conferences: "April 2018", "October 2018"</li>
+                <li>Speakers: "Russell M. Nelson"</li>
+              </ul>
+            </div>
+            <div>
+              To select a random sampling of all available talks, simply omit
+              all criteria from each category.
+            </div>
           </div>
           <button class="modal__close-button" @click="$emit('close')">
             Close
@@ -28,6 +40,14 @@ export default {
 
 <style lang="scss" scoped>
 @use "@/scss/_mixins.scss" as *;
+
+* {
+  --modal-width: 50rem;
+}
+
+.italics {
+  font-style: italic;
+}
 
 .modal {
   &__mask {
@@ -48,7 +68,7 @@ export default {
   }
 
   &__container {
-    width: 30rem;
+    width: var(--modal-width);
     margin: 0px auto;
     padding: 20px 30px;
     background-color: var(--color-white);
@@ -61,6 +81,18 @@ export default {
     font-size: var(--fontsize-conference);
     line-height: calc(var(--fontsize-conference) * 1.4);
     margin-bottom: 3rem;
+
+    & > div:not(:last-of-type) {
+      margin-bottom: 2rem;
+    }
+
+    & ul {
+      margin: 0.5rem 0;
+    }
+
+    & li {
+      list-style: none;
+    }
   }
 
   &__close-button {

@@ -26,8 +26,6 @@ export default {
 }
 
 :root {
-  // --slider-sqr: 50rem;
-  // --slider-padding: 5rem;
   --color-font-black: rgb(0, 0, 0);
   --color-white: rgb(255, 255, 255);
   --color-grey-1: hsl(180, 4%, 70%);

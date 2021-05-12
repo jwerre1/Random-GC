@@ -1,7 +1,7 @@
 <template>
   <div class="search">
     <div class="search__descr">
-      Add search parameters to specialize your random
+      Search category criteria to specialize your random
       <span class="inline-block"
         >talks.
         <span class="search__modal-click" @click="showModal = true">
