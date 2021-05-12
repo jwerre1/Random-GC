@@ -61,7 +61,7 @@ export default {
     },
   },
   watch: {
-    input: debounce(function (val) {
+    input: debounce(function(val) {
       this.dbInput = val;
     }, 500),
   },
@@ -77,7 +77,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/scss/_mixins.scss";
+@use "@/scss/_mixins.scss" as *;
 
 * {
   @include google-font;

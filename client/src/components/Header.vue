@@ -10,9 +10,11 @@
 </template>
 
 <style lang="scss" scoped>
+@use "@/scss/_mixins.scss" as *;
+
 .header {
+  @include google-font;
   background-color: var(--color-grey-4);
-  font-family: "Libre Baskerville", serif;
   padding: 0.5rem 1rem;
 
   display: flex;
@@ -29,7 +31,6 @@
 
     &--subtitle {
       font-size: 1.6rem;
-      font-weight: 400;
     }
   }
 }
