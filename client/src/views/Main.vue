@@ -5,12 +5,14 @@
       <Random />
       <Search />
     </div>
+    <Footer />
   </div>
 </template>
 
 <script>
 import TalkService from "@/services/TalkService.js";
 import Header from "@/components/Header.vue";
+import Footer from "@/components/Footer.vue";
 import Random from "@/components/Random.vue";
 import Search from "@/components/Search.vue";
 
@@ -19,6 +21,7 @@ export default {
   inject: ["GTalks"],
   components: {
     Header,
+    Footer,
     Random,
     Search,
   },
@@ -64,9 +67,6 @@ export default {
 }
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
   margin: 6rem auto;
 
