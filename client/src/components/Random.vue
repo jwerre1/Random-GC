@@ -70,10 +70,10 @@ export default {
   },
   computed: {
     baseURL() {
-      return this.GTalks.talks.baseURL;
+      return this.GTalks.talks?.baseURL;
     },
     language() {
-      return this.GTalks.talks.language;
+      return this.GTalks.talks?.language;
     },
     talks() {
       let talksArr = this.GTalks.talks?.talks;

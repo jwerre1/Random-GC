@@ -67,7 +67,9 @@ export default {
   },
   methods: {
     selected(param) {
+      const filteredLength = this.filtered.length;
       this.GStore[this.collection].push(param);
+      if (filteredLength <= 1) this.input = ""; //reset search if last found result selected
     },
     clearSearch() {
       this.input = "";

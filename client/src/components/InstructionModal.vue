@@ -39,10 +39,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use "@/scss/_variables.scss" as *;
 @use "@/scss/_mixins.scss" as *;
 
 * {
   --modal-width: 50rem;
+
+  @media only screen and (max-width: $bp-small) {
+    --modal-width: 100%;
+  }
 }
 
 .italics {
