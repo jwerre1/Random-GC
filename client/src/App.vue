@@ -55,6 +55,7 @@ html {
   @media only screen and (max-width: $bp-large) {
     font-size: 50%;
   }
+  min-height: 100vh;
 }
 
 body {
