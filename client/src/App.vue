@@ -45,6 +45,7 @@ export default {
   --fontsize-speaker: 1.8rem;
   --fontsize-conference: 1.6rem;
   --fontsize-topic-item: 1.4rem;
+  --fontsize-button: 1.6rem;
 }
 
 html {
@@ -54,6 +55,7 @@ html {
   @media only screen and (max-width: $bp-large) {
     font-size: 50%;
   }
+  min-height: 100vh;
 }
 
 body {

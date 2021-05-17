@@ -3,9 +3,9 @@
     <div class="slider__container">
       <swiper
         v-if="talks.length > 0"
-        effect="flip"
-        navigation
-        slides-per-view="3"
+        :effect="'flip'"
+        :grabCursor="false"
+        :navigation="true"
         @swiper="initSwiper"
       >
         <swiper-slide v-for="(talk, index) in talks" :key="index">
@@ -45,13 +45,12 @@
 </template>
 
 <script>
-//import TalkService from "@/services/TalkService.js";
 import SwiperCore, { Navigation, EffectFlip } from "swiper/core";
 import { Swiper, SwiperSlide } from "swiper/vue";
 
-import "swiper/swiper.scss";
-import "swiper/components/effect-flip/effect-flip.scss";
-import "swiper/components/navigation/navigation.scss";
+import "swiper/swiper-bundle.min.css";
+import "swiper/components/effect-flip/effect-flip.min.css";
+import "swiper/components/navigation/navigation.min.css";
 
 //install swiper.js virtual module
 SwiperCore.use([Navigation, EffectFlip]);
@@ -95,7 +94,7 @@ export default {
     },
   },
   watch: {
-    talks: function() {
+    talks: function () {
       this.setRandom();
       if (this.swiper) this.swiper.slideTo(0, 0); // Reset back to the first slide
     },
@@ -207,7 +206,7 @@ export default {
   &-slide {
     width: var(--slider-sqr);
     height: calc(var(--slider-sqr) - (var(--slider-padding) * 2));
-    box-shadow: 0.5rem 2rem 5rem rgba(0, 0, 0, 0.175);
+    //box-shadow: 0.5rem 2rem 5rem rgba(0, 0, 0, 0.175);
 
     &-active {
       background: var(--color-grey-4);

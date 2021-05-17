@@ -2,7 +2,7 @@ import axios from "axios";
 import GStore from "../store";
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "/",
   withCredentials: false,
   headers: {
     Accept: "application/json",

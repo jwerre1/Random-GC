@@ -14,7 +14,9 @@
     <InstructionModal v-if="showModal" @click="showModal = false" />
     <SelectedParams />
     <div class="search__btn-row">
-      <button class="search__btn" @click="submitSearch">Retrieve Talks</button>
+      <button class="search__btn" @click="submitSearch">
+        Find Random Talks
+      </button>
       <button class="search__btn" :disabled="!foundParams" @click="clearParams">
         Clear Selection<span v-show="foundParams > 1">s</span>
       </button>
@@ -96,6 +98,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use "@/scss/_variables.scss" as *;
 @use "@/scss/_mixins.scss" as *;
 
 .search {
@@ -109,7 +112,7 @@ export default {
   &__descr {
     font-size: var(--fontsize-speaker);
     line-height: calc(var(--fontsize-speaker) * 1.5);
-    margin: 0 0.5rem 2rem 0.5rem;
+    margin: 1.5rem 0.5rem 2rem 0.5rem;
 
     &--info {
       height: 1em; //parent === search__descr
@@ -130,6 +133,10 @@ export default {
     display: flex;
     justify-content: center;
     margin-bottom: 1rem;
+
+    @media only screen and (max-width: $bp-medium) {
+      order: -1;
+    }
   }
 
   &__btn {

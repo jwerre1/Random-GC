@@ -1,6 +1,7 @@
+const path = require("path");
 const express = require("express");
 
-const searchController = require("../controllers/search");
+const searchController = require(path.join(__dirname, "../controllers/search"));
 
 const router = express.Router();
 
