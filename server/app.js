@@ -2,14 +2,17 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const path = require("path");
 
-const talksRoutes = require("./routes/talks");
-const searchRoutes = require("./routes/search");
+const talksRoutes = require(path.join(__dirname, "./routes/talks"));
+const searchRoutes = require(path.join(__dirname, "./routes/search"));
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 app.use(cors());
+
+const port = process.env.PORT || 3000;
 
 mongoose.connect(
   process.env.DB_CONNECT,
@@ -23,4 +26,4 @@ mongoose.connect(
 app.use("/talks", talksRoutes);
 app.use("/search", searchRoutes);
 
-app.listen(3000, () => console.log("server running"));
+app.listen(port, () => console.log("server running"));

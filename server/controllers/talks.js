@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const Talk = require("../models/Talk");
+const path = require("path");
+const Talk = require(path.join(__dirname, "../models/Talk"));
 
 const baseURL = "https://www.churchofjesuschrist.org";
 const language = "?lang=eng";

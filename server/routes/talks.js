@@ -1,6 +1,7 @@
+const path = require("path");
 const express = require("express");
 
-const talksController = require("../controllers/talks");
+const talksController = require(path.join(__dirname, "../controllers/talks"));
 
 const router = express.Router();
 

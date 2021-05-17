@@ -1,6 +1,7 @@
-const Conference = require("../models/Conference");
-const Speaker = require("../models/Speaker");
-const Topic = require("../models/Topic");
+const path = require("path");
+const Conference = require(path.join(__dirname, "../models/Conference"));
+const Speaker = require(path.join(__dirname, "../models/Speaker"));
+const Topic = require(path.join(__dirname, "../models/Topic"));
 
 exports.getSearchParams = async (req, res, next) => {
   try {

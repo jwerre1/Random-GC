@@ -61,7 +61,7 @@ export default {
     },
   },
   watch: {
-    input: debounce(function(val) {
+    input: debounce(function (val) {
       this.dbInput = val;
     }, 500),
   },
@@ -131,6 +131,7 @@ export default {
 
 .list {
   max-height: 20rem;
+  max-width: 40rem;
   overflow-y: auto;
   background-color: var(--color-grey-4);
   width: 70%;

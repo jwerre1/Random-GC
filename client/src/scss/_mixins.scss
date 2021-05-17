@@ -5,7 +5,7 @@
 
 @mixin default-btn {
   @include google-font;
-  font-size: var(--fontsize-topic-item);
+  font-size: var(--fontsize-button);
   background-image: linear-gradient(
     to right,
     var(--color-btn1),
@@ -13,7 +13,7 @@
   );
   color: #fff;
   cursor: pointer;
-  padding: 0.7rem;
+  padding: 1rem;
 
   &:disabled {
     background-image: linear-gradient(
