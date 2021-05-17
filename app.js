@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-const cors = require("cors");
+//const cors = require("cors");
 const path = require("path");
 var serveStatic = require("serve-static");
 
@@ -12,7 +12,7 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(serveStatic(path.join(__dirname, "./client/dist")));
-app.use(cors());
+//app.use(cors());
 
 const port = process.env.PORT || 3000;
 
