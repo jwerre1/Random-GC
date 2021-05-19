@@ -20,14 +20,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use "@/scss/_variables.scss" as *;
 * {
   line-height: var(--fontsize-title);
 }
 
 span {
   text-transform: capitalize;
-  font-size: var(--fontsize-conference);
+  font-size: var(--fontsize-speaker);
   display: inline-block;
+  @media only screen and (max-width: $bp-medium) {
+    font-size: var(--bp-medium-fontsize);
+  }
 }
 
 .item {

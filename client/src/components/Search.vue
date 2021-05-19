@@ -18,7 +18,7 @@
         Find Random Talks
       </button>
       <button class="search__btn" :disabled="!foundParams" @click="clearParams">
-        Clear Selection<span v-show="foundParams > 1">s</span>
+        Clear Search<span v-show="foundParams > 1">s</span>
       </button>
     </div>
     <div v-if="searchParams" class="searchBars">
@@ -100,6 +100,10 @@ export default {
 <style lang="scss" scoped>
 @use "@/scss/_variables.scss" as *;
 @use "@/scss/_mixins.scss" as *;
+
+* {
+  --bp-medium-fontsize: 2.2rem;
+}
 
 .search {
   @include google-font;
