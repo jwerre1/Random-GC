@@ -79,6 +79,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use "@/scss/_variables.scss" as *;
 @use "@/scss/_mixins.scss" as *;
 
 * {
@@ -100,10 +101,18 @@ export default {
     margin: 1rem -3.5rem 1rem 1rem;
     transition: all 0.2s;
 
+    @media only screen and (max-width: $bp-medium) {
+      width: clamp(40rem, 60%, 60%);
+      font-size: var(--bp-medium-fontsize);
+    }
+
     &:focus {
       border: 0;
       outline: 2px solid var(--color-blue-light-1);
       width: 82%;
+      @media only screen and (max-width: $bp-medium) {
+        width: clamp(40.5rem, 62%, 62%);
+      }
     }
   }
 
@@ -137,11 +146,24 @@ export default {
   width: 70%;
   margin-right: -3.5rem;
   border: 1px solid var(--color-grey-1);
+
+  @media only screen and (max-width: $bp-medium) {
+    width: clamp(20rem, 70%, 35rem);
+  }
+
+  @media only screen and (max-width: $bp-smallest) {
+    width: 90%;
+  }
+
   &__item {
     text-transform: capitalize;
     list-style: none;
     cursor: pointer;
-    font-size: var(--fontsize-conference);
+    font-size: var(--fontsize-speaker);
+
+    @media only screen and (max-width: $bp-medium) {
+      font-size: var(--bp-medium-fontsize);
+    }
 
     &:hover {
       background-color: var(--color-blue-light-2);
