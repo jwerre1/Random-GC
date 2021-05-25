@@ -18,24 +18,24 @@
         Find Random Talks
       </button>
       <button class="search__btn" :disabled="!foundParams" @click="clearParams">
-        Clear Search<span v-show="foundParams > 1">s</span>
+        Clear Search
       </button>
     </div>
-    <div v-if="searchParams" class="searchBars">
+    <div class="searchBars">
       <SearchBar
         title="Conferences"
-        :list="searchParams.conferences"
-        :collection="'conferences'"
+        :list="searchParams?.conferences ? searchParams.conferences : []"
+        collection="conferences"
       />
       <SearchBar
         title="Speakers"
-        :list="searchParams.speakers"
-        :collection="'speakers'"
+        :list="searchParams?.speakers ? searchParams.speakers : []"
+        collection="speakers"
       />
       <SearchBar
         title="Topics"
-        :list="searchParams.topics"
-        :collection="'topics'"
+        :list="searchParams?.topics ? searchParams.topics : []"
+        collection="topics"
       />
     </div>
   </div>
@@ -71,6 +71,7 @@ export default {
   },
   methods: {
     submitSearch() {
+      this.GTalks.talks = [];
       TalkService.submitSearch()
         .then((response) => {
           this.GTalks.talks = response.data;

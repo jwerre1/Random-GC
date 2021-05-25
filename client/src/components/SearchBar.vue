@@ -8,7 +8,7 @@
     </button>
   </form>
   <div class="list-container">
-    <ul v-if="filtered.length > 0" class="list">
+    <ul v-if="filtered.length" class="list">
       <li
         v-for="param in filtered"
         :key="param._id"
@@ -16,6 +16,11 @@
         @click="selected(param)"
       >
         {{ param.search }}
+      </li>
+    </ul>
+    <ul v-else-if="input && !list.length" class="list">
+      <li class="list__error">
+        No {{ title }} Found.<br />Please Reload the Page.
       </li>
     </ul>
   </div>
@@ -47,7 +52,7 @@ export default {
   },
   computed: {
     filtered() {
-      if (this.dbInput === "") return [];
+      if (!this.dbInput) return [];
       const regex = new RegExp("^.*" + this.dbInput.toLowerCase() + ".*$");
       return this.list.filter((el) => {
         if (
@@ -168,6 +173,17 @@ export default {
     &:hover {
       background-color: var(--color-blue-light-2);
       color: var(--color-white);
+    }
+  }
+
+  &__error {
+    text-transform: capitalize;
+    list-style: none;
+    font-size: var(--fontsize-speaker);
+    color: var(--color-red);
+
+    @media only screen and (max-width: $bp-medium) {
+      font-size: var(--bp-medium-fontsize);
     }
   }
 }

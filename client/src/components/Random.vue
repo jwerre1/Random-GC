@@ -40,6 +40,11 @@
           </div>
         </swiper-slide>
       </swiper>
+      <div v-else class="slider__empty">
+        <div class="slider__empty--content">
+          <div class="slider__empty--text">Loading...</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -141,6 +146,8 @@ export default {
     --slider-sqr: 40rem;
     --slider-padding: 5rem;
   }
+
+  --swiper-lib-width: calc(var(--slider-sqr) - (var(--slider-padding) * 2));
 }
 
 .slider {
@@ -194,6 +201,30 @@ export default {
       font-size: var(--fontsize-topic-item);
     }
   }
+
+  &__empty {
+    width: var(--slider-sqr);
+    height: var(--slider-sqr);
+    padding: var(--slider-padding);
+    margin: 0 auto;
+
+    &--content {
+      width: var(--swiper-lib-width);
+      height: var(--swiper-lib-width);
+      background: var(--color-grey-4);
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      color: var(--color-font-black);
+    }
+
+    &--text {
+      font-size: var(--fontsize-title);
+    }
+  }
 }
 
 .swiper {
@@ -204,8 +235,8 @@ export default {
   }
 
   &-slide {
-    width: var(--slider-sqr);
-    height: calc(var(--slider-sqr) - (var(--slider-padding) * 2));
+    width: var(--swiper-lib-width);
+    height: var(--swiper-lib-width);
     //box-shadow: 0.5rem 2rem 5rem rgba(0, 0, 0, 0.175);
 
     &-active {
