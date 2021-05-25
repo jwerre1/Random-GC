@@ -1,6 +1,6 @@
 export function debounce(func, delay) {
   let inDebounce;
-  return function() {
+  return function () {
     const context = this;
     const args = arguments;
     clearTimeout(inDebounce);

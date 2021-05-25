@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
+    "start:dev": "nodemon app.js",
     "scrape:session": "node ./admin/bysession.js",
     "scrape:speakers": "node ./admin/byspeaker.js",
     "scrape:topics": "node ./admin/topics.js"
