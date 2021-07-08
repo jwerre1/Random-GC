@@ -103,7 +103,8 @@ export default {
     text-transform: capitalize;
     width: 80%;
     padding: 0.7rem 2rem;
-    margin: 1rem -3.5rem 1rem 1rem;
+    /* margin: 1rem -3.5rem 1rem 1rem; */
+    margin: 1rem;
     transition: all 0.2s;
 
     @media only screen and (max-width: $bp-medium) {
@@ -133,6 +134,8 @@ export default {
   &__clear {
     height: 2rem;
     width: 2rem;
+    margin-top: 0.5rem;
+    margin-left: -4em;
     fill: var(--color-grey-2);
   }
 }
@@ -149,7 +152,7 @@ export default {
   overflow-y: auto;
   background-color: var(--color-grey-4);
   width: 70%;
-  margin-right: -3.5rem;
+  /* margin-right: -3.5rem; */
   border: 1px solid var(--color-grey-1);
 
   @media only screen and (max-width: $bp-medium) {
