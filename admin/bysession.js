@@ -21,7 +21,7 @@ const axios = require("axios");
 // Set start and end date + months for scrape
 const parms = {
   start: 1971,
-  end: 2021,
+  end: 2023,
   months: ["04", "10"],
 };
 
@@ -33,7 +33,7 @@ const conferenceLink = (link) => {
   return linkRegex.test(link.href);
 };
 
-const sidebar = (link) => link.className.indexOf("item-3cCP7") !== -1;
+const sidebar = (link) => link.className.indexOf("item-U_5Ca") !== -1;
 
 (() => {
   mongoose.connect(
@@ -86,7 +86,7 @@ const sidebar = (link) => link.className.indexOf("item-3cCP7") !== -1;
               continue talkLoop; //Talk already saved.
             }
             const speakerList = [
-              ...link.getElementsByClassName("subtitle-MuO4X"),
+              ...link.getElementsByClassName("subtitle-LKtQp"),
             ];
             if (speakerList.length !== 1) {
               console.log(`ERROR: Multiple/no speakers found for ${talkLink}.`);

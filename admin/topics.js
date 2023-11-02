@@ -27,6 +27,8 @@ const conferenceLink = (link) => {
   return linkRegex.test(link.href);
 };
 
+const talkLink = (link) => link.className.indexOf("sc-omeqik-0") !== -1;
+
 (() => {
   mongoose.connect(
     process.env.DB_CONNECT,
@@ -45,6 +47,17 @@ const conferenceLink = (link) => {
       topicLoop: for (const link of links) {
         const topicLink = baseURL + link.href + language;
         const topicname = link.querySelector("h4").textContent;
+
+        let pageResponse;
+        try {
+          pageResponse = await axios.get(topicLink);
+        } catch (error) {
+          console.log(
+            `ERROR: Couldn't load page for topic '${topicname}' - ${link.href}`
+          );
+          continue topicLoop; //error finding/creating topic
+        }
+
         let topicObj = await dbTools.findTopic(topicname);
         if (!topicObj) topicObj = await dbTools.setTopic(topicname);
         if (!topicObj) {
@@ -52,12 +65,13 @@ const conferenceLink = (link) => {
           continue topicLoop; //error finding/creating topic
         }
 
-        const pageResponse = await axios.get(topicLink);
         const topicDom = new JSDOM(pageResponse.data);
         const topicNodeList = [
           ...topicDom.window.document.querySelectorAll("a"),
         ];
-        const talks = await topicNodeList.filter(conferenceLink);
+        const talks = await topicNodeList
+          .filter(conferenceLink)
+          .filter(talkLink);
         talkLoop: for (const talk of talks) {
           const talkLink = talk.href;
           const talkObj = await dbTools.findTalk(talkLink);
